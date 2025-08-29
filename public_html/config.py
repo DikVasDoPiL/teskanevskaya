@@ -1,5 +1,5 @@
 class Config(object):
     DEBUG = True
 
-class DevelopmentConfig(Config):
+class ProdConfig(Config):
     DEBUG = False
