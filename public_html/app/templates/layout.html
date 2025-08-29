@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+    {% block head %}
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="description"
+            content="Продажа и установка кондиционеров, сплит-систем, обогревателей и другой климатической техники. 
+            Гарантия выполненных работ, низкие цены. Работа с физическими и юридическими лицами. Технологии сервиса | станица Каневская"
+        />
+        <meta
+            name="keywords"
+            content="продажа кондиционеров, сплит-системы
+            канальные кондиционеры, кассетные кондиционеры,
+            колонные кондиционеры, крышные кондиционеры,
+            напольно-потолочные системы, установка кондиционеров,
+            сервисное обслуживание, электробогреватели, керамические обогреватели,
+            инверторы, конвекционные воздушные обогреватели, 
+            Технологии сервиса, Каневская"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="author" content="John Doe" />
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}?v=1" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.0" />
+
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="{{ url_for('static', filename='img/icon/air-conditioner.svg') }}"
+        />
+
+        <title>Технологии сервиса | {% block title %}Каневская{% endblock %}</title>
+    </head>
+    {% endblock %}
+
+    <body>
+        <div id="preloader">
+            <img
+                src="{{ url_for('static', filename='img/pic/transparent.png') }}"
+                alt="air-conditioner"
+                class="icon-svg preloader-img"
+            />
+            <h1 class="preloader-text">Технологии сервиса - Каневская</h1>
+            <div class="loader"></div>
+        </div>
+
+        {% block header %}
+        {% endblock %}
+        
+        <main>
+            <!-- first screen -->
+             {% block content %}
+            {% endblock %}
+
+            <!-- second screen -->
+
+            {% block contact %}
+            {% endblock %}
+        </main>
+
+        {% block footer %}
+        {% endblock %}
+        
+        <img class="bg-image"
+            src="{{ url_for('static', filename='img/icon/teplo-xolod.png') }}"
+            alt=""
+            srcset=""
+        />
+        <script type="module" src="{{ url_for('static', filename='js/preloader.js') }}"></script>
+    </body>
+</html>

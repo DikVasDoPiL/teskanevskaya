@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block header %}
+        <header class="header">
+            <div class="container">
+                <div class="header-content content">
+                    <img
+                        class="header-image icon-svg"
+                        src="{{ url_for('static', filename='img/logo/label.png') }}"
+                        alt="air-conditioner"
+                    />
+                    <div class="header-title">
+                        <h1>Технологии сервиса - Каневская</h1>
+                        <p>
+                            Широкий ассортимент сплит-систем, обогревателей<br />
+                            и другой климатической техники<br />
+                            выгодные цены и профессиональная установка
+                        </p>
+                    </div>
+
+                    <a class="btn green-btn" href="tel:+79186416416">
+                        <img
+                            class="contact-icon"
+                            src="{{ url_for('static', filename='img/icon/phone-calling.svg') }}"
+                            alt="Phone icon-svg"
+                            srcset=""
+                        />
+                        <div>+7 (918) 641-64-16</div>
+                    </a>
+                </div>
+            </div>
+        </header>
+{% endblock %}

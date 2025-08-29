@@ -1,0 +1,173 @@
+{% extends "footer.html" %}
+
+{% block contact %}
+
+            <!-- contact section  -->
+            <section class="main-section">
+                <div class="container">
+                    <div class="contact-block">
+                        <a class="btn green-btn" href="tel:+79186416416">
+                            <img
+                                class="contact-icon"
+                                src="{{ url_for('static', filename='img/icon/phone-calling.svg') }}"
+                                alt="Call"
+                                srcset=""
+                            />
+                            <div>Позвонить</div>
+                        </a>
+                        <a
+                            class="btn grey-btn"
+                            href="https://t.me/teskanevskaya"
+                        >
+                            <img
+                                class="contact-icon"
+                                src="{{ url_for('static', filename='img/icon/telegram-ring.svg') }}"
+                                alt="Telegram"
+                                srcset=""
+                            />
+                            <div>Telegram</div>
+                        </a>
+                        <a
+                            class="btn grey-btn"
+                            href="https://wa.me/79186416416"
+                        >
+                            <img
+                                class="contact-icon"
+                                src="{{ url_for('static', filename='img/icon/whatsapp.svg') }}"
+                                alt="Whatsapp"
+                                srcset=""
+                            />
+                            <div>WhatsApp</div>
+                        </a>
+
+                        <a
+                            class="btn grey-btn"
+                            href="https://vk.com/klimatkanevskaya"
+                        >
+                            <img
+                                class="contact-icon"
+                                src="{{ url_for('static', filename='img/icon/VK_Compact_Logo.svg') }}"
+                                alt="VK"
+                                srcset=""
+                            />
+                            <div>Мы ВКонтакте</div>
+                        </a>
+
+                        <a
+                            class="btn grey-btn"
+                            href="https://avito.ru/brands/f8c6394e1a5d07664b6a3f014c646798"
+                        >
+                            <img
+                                class="contact-icon"
+                                src="{{ url_for('static', filename='img/icon/avito.svg') }}"
+                                alt="Avito"
+                                srcset=""
+                            />
+                            <div>Avito.ru</div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+            <!-- map section  -->
+            <section class="main-section">
+                <div class="container">
+                    <div class="content">
+                        <div class="double-column">
+                            <div class="left-column">
+                                <div class="main-content">
+                                    <h3>Наши партнеры</h3>
+                                    <div class="partners">
+                                        <div class="partner">
+                                            <img
+                                                class="partner-img"
+                                                src="{{ url_for('static', filename='img/partners/Morozko_logo.svg') }}"
+                                                alt="Morozko"
+                                            />
+                                        </div>
+                                        <div class="partner">
+                                            <img
+                                                class="partner-img"
+                                                src="{{ url_for('static', filename='img/partners/funai-no-padding.svg') }}"
+                                                alt="Funai"
+                                            />
+                                        </div>
+                                        <div class="partner">
+                                            <img
+                                                class="partner-img"
+                                                src="{{ url_for('static', filename='img/partners/hisense-color.svg') }}"
+                                                alt="Hisense"
+                                            />
+                                        </div>
+                                        <div class="partner">
+                                            <img
+                                                class="partner-img"
+                                                src="{{ url_for('static', filename='img/partners/hitachi-no-padding.svg') }}"
+                                                alt="Hitachi"
+                                            />
+                                        </div>
+                                        <div class="partner">
+                                            <img
+                                                class="partner-img"
+                                                src="{{ url_for('static', filename='img/partners/Mitsudai_logo.svg') }}"
+                                                alt="Mitsudai"
+                                            />
+                                        </div>
+                                        <div class="partner">
+                                            <img
+                                                class="partner-img"
+                                                src="{{ url_for('static', filename='img/partners/philips-no-padding.svg') }}"
+                                                alt="Philips"
+                                            />
+                                        </div>
+                                        <div class="partner">
+                                            <img
+                                                class="partner-img"
+                                                src="{{ url_for('static', filename='img/partners/royal-no-padding.svg') }}"
+                                                alt="Royal"
+                                            />
+                                        </div>
+                                        <div class="partner">
+                                            <img
+                                                class="partner-img"
+                                                src="{{ url_for('static', filename='img/partners/ultima-no-padding.svg') }}"
+                                                alt="Ultima"
+                                            />
+                                        </div>
+                                        <div class="partner">
+                                            <img
+                                                class="partner-img"
+                                                src="{{ url_for('static', filename='img/partners/xigma-no-padding.svg') }}"
+                                                alt="Xigma"
+                                            />
+                                        </div>
+                                        <div class="partner">
+                                            <img
+                                                class="partner-img"
+                                                src="{{ url_for('static', filename='img/partners/zilon-no-padding.svg') }}"
+                                                alt="Zilion"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="right-column">
+                                <div class="main-content">
+                                    <h3>Фирменный магазин</h3>
+                                    <iframe
+                                        class="yandex-map"
+                                        src="https://yandex.ru/map-widget/v1/?ll=38.962135%2C46.081192&mode=search&oid=66220017520&ol=biz&z=16.76"
+                                        freameborder="0"
+                                        allowfullscreen="true"
+                                    >
+                                    </iframe>
+                                    <p>
+                                        станица Каневская, улица Тракторная, 21Б
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+{% endblock %}
