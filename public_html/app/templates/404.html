@@ -1,0 +1,19 @@
+{% extends "contact.html" %}
+
+{% block title %}
+страница не найдена
+{% endblock %}
+
+{% block content %}
+
+            <section class="main-section">
+                <div class="container">
+                    <div class="content page-404">
+                        <h1>404 - Страница не найдена</h1>
+                        <img  class="icon" src="{{ url_for('static', filename='img/icon/snowflake.svg') }}" alt="404">
+                        <a href="./" class="btn grey-btn">
+                        <img class="contact-icon" src="{{ url_for('static', filename='img/icon/click.svg') }}" alt="Click" srcset="{{ url_for('static', filename='img/icon/click.svg') }}"><div>Вернуться на главную</div></a>
+                    </div>  
+                </div>
+            </section>
+{% endblock %}

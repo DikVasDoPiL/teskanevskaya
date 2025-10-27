@@ -1,0 +1,47 @@
+{% extends "footer.html" %}
+
+{% block content %}
+
+            <!-- Form section  -->
+            <section class="main-section">
+                <div class="container">
+                  <h1>{{ title }}</h1>
+                  <form class="form-login" action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    <p class="form-login--field">
+                      {{ form.username.label }}<span style="color: red;">*</span><br>
+                      {{ form.username(size=32) }}
+                      {% for error in form.username.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                      {% endfor %}
+                    </p>
+                    <p class="form-login--field">
+                      {{ form.password.label }}<span style="color: red;">*</span><br>
+                      {{ form.password(size=32) }}
+                      {% for error in form.password.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                      {% endfor %}
+                    </p>
+                    <p class="form-login--submit">{{ form.submit() }}</p>
+                  </form>
+                </div>
+            </section>
+
+            <!-- Message section  -->
+            <section class="main-section">
+                <div class="container">
+                    {% with messages = get_flashed_messages() %}
+                      {% if messages %}
+                        <ul>
+                          {% for message in messages %}
+                            <li><span style="color: red;">[{{ message }}]</span></li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    {% endwith %}
+                </div>
+            </section>
+
+
+
+{% endblock %}

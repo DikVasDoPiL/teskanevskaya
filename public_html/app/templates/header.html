@@ -4,17 +4,16 @@
         <header class="header">
             <div class="container">
                 <div class="header-content content">
+                    <a class="header-logo" href="./" >
                     <img
                         class="header-image icon-svg"
-                        src="{{ url_for('static', filename='img/logo/label.png') }}"
+                        src="{{ url_for('static', filename='img/logo/label.webp') }}"
                         alt="air-conditioner"
-                    />
+                    /></a>
                     <div class="header-title">
-                        <h1>Технологии сервиса - Каневская</h1>
-                        <p>
-                            Широкий ассортимент сплит-систем, обогревателей<br />
-                            и другой климатической техники<br />
-                            выгодные цены и профессиональная установка
+                        <p class="header-title-label">Технологии сервиса - Каневская</p>
+                        <p class="header-title-text">
+                            Широкий ассортимент сплит-систем, обогревателей и другой климатической техники<br> Выгодные цены и профессиональная установка
                         </p>
                     </div>
 
@@ -23,11 +22,18 @@
                             class="contact-icon"
                             src="{{ url_for('static', filename='img/icon/phone-calling.svg') }}"
                             alt="Phone icon-svg"
-                            srcset=""
-                        />
+                            srcset="{{ url_for('static', filename='img/icon/phone-calling.svg') }}"
+                        >
                         <div>+7 (918) 641-64-16</div>
                     </a>
                 </div>
             </div>
+            <nav class="top-nav container">
+                <ul class="top-menu">
+                    <li><a class="top-menu--item" href="{{ url_for('index') }}">Главная</a></li>
+                    <li><a class="top-menu--item" href="/">Каталог</a></li>
+                    <li><a class="top-menu--item" href="/">О нас</a></li>
+                </ul>
+            </nav>
         </header>
 {% endblock %}

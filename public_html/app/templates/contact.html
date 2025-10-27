@@ -11,8 +11,8 @@
                                 class="contact-icon"
                                 src="{{ url_for('static', filename='img/icon/phone-calling.svg') }}"
                                 alt="Call"
-                                srcset=""
-                            />
+                                srcset="{{ url_for('static', filename='img/icon/phone-calling.svg') }}"
+                            >
                             <div>Позвонить</div>
                         </a>
                         <a
@@ -23,8 +23,8 @@
                                 class="contact-icon"
                                 src="{{ url_for('static', filename='img/icon/telegram-ring.svg') }}"
                                 alt="Telegram"
-                                srcset=""
-                            />
+                                srcset="{{ url_for('static', filename='img/icon/telegram-ring.svg') }}"
+                            >
                             <div>Telegram</div>
                         </a>
                         <a
@@ -35,8 +35,8 @@
                                 class="contact-icon"
                                 src="{{ url_for('static', filename='img/icon/whatsapp.svg') }}"
                                 alt="Whatsapp"
-                                srcset=""
-                            />
+                                srcset="{{ url_for('static', filename='img/icon/whatsapp.svg') }}"
+                            >
                             <div>WhatsApp</div>
                         </a>
 
@@ -48,8 +48,8 @@
                                 class="contact-icon"
                                 src="{{ url_for('static', filename='img/icon/VK_Compact_Logo.svg') }}"
                                 alt="VK"
-                                srcset=""
-                            />
+                                srcset="{{ url_for('static', filename='img/icon/VK_Compact_Logo.svg') }}"
+                            >
                             <div>Мы ВКонтакте</div>
                         </a>
 
@@ -61,8 +61,8 @@
                                 class="contact-icon"
                                 src="{{ url_for('static', filename='img/icon/avito.svg') }}"
                                 alt="Avito"
-                                srcset=""
-                            />
+                                srcset="{{ url_for('static', filename='img/icon/avito.svg') }}"
+                            >
                             <div>Avito.ru</div>
                         </a>
                     </div>
@@ -82,70 +82,70 @@
                                                 class="partner-img"
                                                 src="{{ url_for('static', filename='img/partners/Morozko_logo.svg') }}"
                                                 alt="Morozko"
-                                            />
+                                            >
                                         </div>
                                         <div class="partner">
                                             <img
                                                 class="partner-img"
                                                 src="{{ url_for('static', filename='img/partners/funai-no-padding.svg') }}"
                                                 alt="Funai"
-                                            />
+                                            >
                                         </div>
                                         <div class="partner">
                                             <img
                                                 class="partner-img"
                                                 src="{{ url_for('static', filename='img/partners/hisense-color.svg') }}"
                                                 alt="Hisense"
-                                            />
+                                            >
                                         </div>
                                         <div class="partner">
                                             <img
                                                 class="partner-img"
                                                 src="{{ url_for('static', filename='img/partners/hitachi-no-padding.svg') }}"
                                                 alt="Hitachi"
-                                            />
+                                            >
                                         </div>
                                         <div class="partner">
                                             <img
                                                 class="partner-img"
                                                 src="{{ url_for('static', filename='img/partners/Mitsudai_logo.svg') }}"
                                                 alt="Mitsudai"
-                                            />
+                                            >
                                         </div>
                                         <div class="partner">
                                             <img
                                                 class="partner-img"
                                                 src="{{ url_for('static', filename='img/partners/philips-no-padding.svg') }}"
                                                 alt="Philips"
-                                            />
+                                            >
                                         </div>
                                         <div class="partner">
                                             <img
                                                 class="partner-img"
                                                 src="{{ url_for('static', filename='img/partners/royal-no-padding.svg') }}"
                                                 alt="Royal"
-                                            />
+                                            >
                                         </div>
                                         <div class="partner">
                                             <img
                                                 class="partner-img"
                                                 src="{{ url_for('static', filename='img/partners/ultima-no-padding.svg') }}"
                                                 alt="Ultima"
-                                            />
+                                            >
                                         </div>
                                         <div class="partner">
                                             <img
                                                 class="partner-img"
                                                 src="{{ url_for('static', filename='img/partners/xigma-no-padding.svg') }}"
                                                 alt="Xigma"
-                                            />
+                                            >
                                         </div>
                                         <div class="partner">
                                             <img
                                                 class="partner-img"
                                                 src="{{ url_for('static', filename='img/partners/zilon-no-padding.svg') }}"
                                                 alt="Zilion"
-                                            />
+                                            >
                                         </div>
                                     </div>
                                 </div>
@@ -153,16 +153,14 @@
                             <div class="right-column">
                                 <div class="main-content">
                                     <h3>Фирменный магазин</h3>
-                                    <iframe
-                                        class="yandex-map"
-                                        src="https://yandex.ru/map-widget/v1/?ll=38.962135%2C46.081192&mode=search&oid=66220017520&ol=biz&z=16.76"
-                                        freameborder="0"
-                                        allowfullscreen="true"
-                                    >
-                                    </iframe>
-                                    <p>
-                                        станица Каневская, улица Тракторная, 21Б
-                                    </p>
+									<a href="https://yandex.ru/maps/?from=mapframe&ll=38.962135%2C46.081192&poi%5Bpoint%5D=38.962135&poi%5Bpoint%5D=46.081192&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D66220017520&source=mapframe&utm_source=mapframe&z=16">
+										<img class="yandex-map"
+										src="{{ url_for('static', filename='img/pic/map.png') }}"
+										alt="map-link"
+										srcset="{{ url_for('static', filename='img/pic/map.png') }}"
+									>
+									</a>
+                                    <p>станица Каневская, улица Тракторная, 21Б</p>
                                 </div>
                             </div>
                         </div>
