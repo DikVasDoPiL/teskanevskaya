@@ -9,9 +9,10 @@
         <div class="dashboard container">
             <aside>
                 <ul class="admin-menu">
-                    <li><a class="admin-menu--item admin-menu--item__active" href="{{ url_for('list_categories') }}">Категории</a></li>
-                    <li><a class="admin-menu--item" href="#">Товары</a></li>
-                    <li><a class="admin-menu--item" href="#">Услуги</a></li>
+                    <li><a class="admin-menu--item" href="{{ url_for('dashboard') }}">Админка</a></li>
+                    <li><a class="admin-menu--item" href="{{ url_for('list_categories') }}">Категории</a></li>
+                    <li><a class="admin-menu--item" href="{{ url_for('dashboard') }}">Товары</a></li>
+<!--                    <li><a class="admin-menu&#45;&#45;item" href="{{ url_for('dashboard') }}">Услуги</a></li>-->
                     <li><a class="admin-menu--item" href="/logout">Выход</a></li>
                 </ul>
             </aside>
@@ -21,6 +22,20 @@
             </article>
         </div>
     </section>
+
+       <dialog class="modal-window" id="overlayMenu">
+           <div class="modal-content">
+                <form id="modal-form" method="dialog">
+                    <div class="modal-control">
+                        <button class="cat-btn grey-btn" type="submit">Закрыть</button>
+                    </div>
+                </form>
+
+                {% block modal %}
+                {% endblock %}
+            </div>
+
+       </dialog>
 
     <!-- Message section  -->
     <section class="main-section">

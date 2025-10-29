@@ -1,5 +1,17 @@
 {% extends "public.html" %}
 
+{% block preloader %}
+    <div id="preloader">
+        <img
+            src="{{ url_for('static', filename='img/pic/transparent.png') }}"
+            alt="air-conditioner"
+            class="preloader-img"
+        >
+        <p class="preloader-text">Технологии сервиса - Каневская</p>
+        <div class="loader"></div>
+    </div>
+{% endblock %}
+
 {% block content %}
 
             <!-- Form section  -->

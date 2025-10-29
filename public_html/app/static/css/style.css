@@ -3,11 +3,15 @@
 	--wrapper-big: 64rem;
 	--wrapper-middle: 50rem;
 	--wrapper-small: 25rem;
+	--color-btn-hover: rgb(58, 206, 0);
+	--color-heads-color: #ff6b00;
+	--color-background: #f7f7f7;
+	--color-shadow: #000000A0;
 }
 
 body {
     font-family: Geneva, Arial, Helvetica, sans-serif;
-    background-color: #f7f7f7;
+    background-color: var(--color-background);
     color: #333;
     display: flex;
     flex-direction: column;
@@ -320,6 +324,7 @@ footer a {
 
 #preloader {
     position: fixed;
+    top: 0;
     width: 100%;
 	height: 100vh;
     background: #ff6b00;
@@ -377,7 +382,8 @@ footer a {
     gap: 1rem;
 }
 
-.form-login--field input {
+.form-login--field input,
+.form-login--field select {
     padding: 0.25rem 0.75rem;
     font-size: 1rem;
     border-radius: 0.25rem;
@@ -385,7 +391,15 @@ footer a {
     line-height: 2rem;
 }
 
-.form-login--submit input#submit {
+.form-login--submit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.form-login--submit input#submit,
+ .form-login--submit input#submit_new,
+ .form-login--submit input#submit_save{
     padding: 0.25rem 1.25rem;
     border-radius: 0.25rem;
     font-size: 1rem;
@@ -403,8 +417,80 @@ footer a {
      inset +0.75px +0.5px rgba(255, 255, 255, 0.4);
 }
 
-.form-login--submit input#submit:hover {
+.form-login--submit input#submit:hover,
+.form-login--submit input#submit_new:hover,
+.form-login--submit input#submit_save:hover {
     background-color: rgb(58, 206, 0);
+}
+
+.cat-menu {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.cat-btn {
+    text-decoration: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25em;
+    font-size: 1.2rem;
+    border: None;
+    display: flex;
+    align-items: center;
+}
+
+dialog, dialog::backdrop {
+    opacity: 0;
+    scale: 1.05;
+    transition-duration: 0.2s;
+    transition-behavior: allow-discrete;
+    background-color: var(--color-shadow);
+    padding: 0;
+    margin: auto;
+}
+
+dialog[open], dialog[open]::backdrop {
+    opacity: 1;
+    scale: 1;
+
+    @starting-style {
+        opacity: 0;
+        scale: 1.05;
+    }
+}
+
+.modal-window {
+    border: none;
+    background-color: var(--color-background);
+    border-radius: 0.5rem;
+    box-shadow: 0px 0px 2rem 0.2rem rgba(0, 0, 0, 0.5);
+}
+
+.modal-control {
+    display: flex;
+    justify-content: end;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.modal-content {
+    margin: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#form-category .form-login--field input,
+#form-category .form-login--field textarea {
+    border: 1px solid #aaa;
+    border-radius: 0.25rem;
+    width: 100%;
+    padding: 0.25rem;
+}
+
+
+.form-login--field textarea {
+    width: 100%;
 }
 
 /* CONTAINER REQUEST */
@@ -502,11 +588,16 @@ footer a {
 
 @media (hover: hover) {
   .btn:hover {
-    background-color: rgb(58, 206, 0);
+    background-color: var(--color-btn-hover);
     transition: linear 0.1s;
   }
   
   .shield:hover .shield-inner {
     transform: rotateY(180deg);
+  }
+
+  .cat-btn:hover {
+    background-color: var(--color-heads-color);
+    transition: 0.2s ease-in-out;
   }
 }

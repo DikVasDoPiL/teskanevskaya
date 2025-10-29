@@ -54,20 +54,12 @@
 
 
 
-        <title>Технологии сервиса - {% block title %}Каневская{% endblock %}</title>
+        <title>{% block title %}Главная{% endblock %} Технологии сервиса - Каневская</title>
     </head>
     {% endblock %}
 
     <body>
-        <div id="preloader">
-            <img
-                src="{{ url_for('static', filename='img/pic/transparent.png') }}"
-                alt="air-conditioner"
-                class="preloader-img"
-            >
-            <p class="preloader-text">Технологии сервиса - Каневская</p>
-            <div class="loader"></div>
-        </div>
+
 
         {% block header %}
         {% endblock %}
@@ -86,6 +78,7 @@
         {% endblock %}
         		
         <script type="module" src="{{ url_for('static', filename='js/preloader.js') }}"></script>
+        <script type="module" src="{{ url_for('static', filename='js/script.js') }}?v=0.1"></script>
 
     </body>
 </html>

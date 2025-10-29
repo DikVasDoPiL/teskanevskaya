@@ -4,7 +4,7 @@
         <header class="header">
             <div class="container">
                 <div class="header-content content">
-                    <a class="header-logo" href="./" >
+                    <a class="header-logo" href="{{ url_for('.index') }}" >
                     <img
                         class="header-image icon-svg"
                         src="{{ url_for('static', filename='img/logo/label.webp') }}"
@@ -30,9 +30,9 @@
             </div>
             <nav class="top-nav container">
                 <ul class="top-menu">
-                    <li><a class="top-menu--item" href="{{ url_for('index') }}">Главная</a></li>
-                    <li><a class="top-menu--item" href="/">Каталог</a></li>
-                    <li><a class="top-menu--item" href="/">О нас</a></li>
+                    <li><a class="top-menu--item" href="{{ url_for('.index') }}">Главная</a></li>
+                    <li><a class="top-menu--item" href="{{ url_for('.index') }}">Каталог</a></li>
+                    <li><a class="top-menu--item" href="{{ url_for('.index') }}">О нас</a></li>
                 </ul>
             </nav>
         </header>

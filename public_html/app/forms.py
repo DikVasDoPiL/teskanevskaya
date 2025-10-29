@@ -31,4 +31,6 @@ class CategoryForm(FlaskForm):
         allow_blank=True,  # Опционально: без родителя
         blank_text='- Нет родителя -'
     )
-    submit = SubmitField('Сохранить')
+    submit_new = SubmitField('Создать')
+    submit_save = SubmitField('Сохранить')
+    submit_delete = SubmitField('Удалить')

@@ -4,7 +4,7 @@ import sqlalchemy as sa
 from werkzeug.security import generate_password_hash
 
 from . import app, db
-from .forms import LoginForm
+from .forms import LoginForm, CategoryForm
 from .models import User, Category
 
 
@@ -71,9 +71,12 @@ def list_categories():
     for cat in categories:
         cat.children
 
+    form = CategoryForm()
+
     return render_template('categories.html',
-                          title="Категории",
-                          categories=categories,
-                          active_only=active_only)
+                           title="Категории",
+                           categories=categories,
+                           active_only=active_only,
+                           form=form)
 
 
