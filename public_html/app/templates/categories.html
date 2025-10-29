@@ -1,0 +1,26 @@
+{% extends "private.html" %}
+
+{% block title %}
+    <p>lorem</p>
+{% endblock %}
+
+{% block article %}
+    <a href="{{ url_for('list_categories', active_only='true', show_children=show_children|string) }}">Только активные</a> |
+    <a href="{{ url_for('list_categories', active_only='false', show_children=show_children|string) }}">Все</a> |
+    <a href="{{ url_for('list_categories', show_children='true', active_only=active_only|string) }}">С подкатегориями</a>
+
+    <ul>
+    {% for cat in categories %}
+        <li style="margin-left: {{ cat._level * 20 }}px;">  <!-- Отступ для дерева -->
+            {{ cat.name }} ({{ 'Активна' if cat.active else 'Неактивна' }})
+            {% if cat.description %}<br><small>{{ cat.description }}</small>{% endif %}
+            {% if cat.parent %}(Родитель: {{ cat.parent.name }}){% endif %}
+            {% if cat.children %}(Дети: {{ cat.children|length }}){% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
+
+
+
