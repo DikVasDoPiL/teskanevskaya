@@ -1,0 +1,54 @@
+{% extends "private.html" %}
+
+{% block title %}
+    Редактор:
+{% endblock %}
+
+{% block article %}
+
+<h2>{{title}}</h2>
+      <form id="form-category" class="form-category" action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="form-category--field">
+          <div>{{ form.name.label }}<span style="color: red;">*</span></div>
+          <div class="field--input">
+            {{ form.name() }}
+            {% for error in form.name.errors %}
+              <span>[{{ error }}]</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="form-category--field">
+          <div>{{ form.active.label }}</div>
+          <div class="field--checkbox">
+            {{ form.active() }}
+            {% for error in form.name.errors %}
+              <span>[{{ error }}]</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="form-category--field">
+          <div>{{ form.description.label }}</div>
+          <div class="field-textarea">
+            {{ form.description() }}
+            {% for error in form.description.errors %}
+              <span>[{{ error }}]</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="form-category--field">
+          <div>{{ form.parent.label }}</div>
+          <div class="field-select">
+            {{ form.parent() }}
+            {% for error in form.parent.errors %}
+              <span>[{{ error }}]</span>
+            {% endfor %}
+          </div>
+        </div>
+        <p class="form-login--submit">{{ form.submit_save() }}</p>
+      </form>
+{% endblock %}
+
+
+
+

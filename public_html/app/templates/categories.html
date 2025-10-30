@@ -6,22 +6,40 @@
 
 {% block article %}
     <div class="cat-menu">
-<!--        <a class="cat-btn grey-btn" href="{{ url_for('list_categories', active_only='true', show_children=show_children|string) }}">Только активные</a>-->
-<!--        <a class="cat-btn grey-btn" href="{{ url_for('list_categories', active_only='false', show_children=show_children|string) }}">Все</a>-->
-<!--        <a class="cat-btn grey-btn" href="{{ url_for('list_categories', show_children='true', active_only=active_only|string) }}">С подкатегориями</a>-->
+<!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', active_only='true', show_children=show_children|string) }}">Только активные</a>-->
+<!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', active_only='false', show_children=show_children|string) }}">Все</a>-->
+<!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', show_children='true', active_only=active_only|string) }}">С подкатегориями</a>-->
         <button class="cat-btn grey-btn" type="button" onclick="overlayMenu.showModal()">Добавить</button>
     </div>
 
-    <ul>
+    <div class="categories">
+        <header class="categories-header">
+            <div class="cat-parent">Родитель</div>
+            <div class="cat-name">Категория</div>
+            <div class="cat-description">Описание</div>
+            <div class="cat-children">Подкатегорий</div>
+            <div class="cat-status">Статус</div>
+        </header>
     {% for cat in categories %}
-        <li style="margin-left: {{ cat._level * 20 }}px;">  <!-- Отступ для дерева -->
-            {{ cat.name }} ({{ 'Активна' if cat.active else 'Неактивна' }})
-            {% if cat.description %}<br><small>{{ cat.description }}</small>{% endif %}
-            {% if cat.parent %}(Родитель: {{ cat.parent.name }}){% endif %}
-            {% if cat.children %}(Дети: {{ cat.children|length }}){% endif %}
-        </li>
+        <a class="category" href="{{ url_for('category', name=cat.name) }}">
+            <div class="cat-parent">
+                {{ cat.parent.name if cat.parent else '---' }}
+            </div>
+            <div class="cat-name">
+                {{ cat.name }}
+            </div>
+            <div class="cat-description">
+                {{ cat.description if cat.description else '---' }}
+            </div>
+            <div class="cat-children">
+                {{ cat.children|length if cat.children else '---' }}
+            </div>
+            <div class="cat-status">
+                {{ 'Активна' if cat.active else 'Неактивна' }}
+            </div>
+        </a>
     {% endfor %}
-    </ul>
+    </div>
 
 
 {% endblock %}
@@ -39,14 +57,14 @@
               {% endfor %}
             </p>
             <p class="form-login--field">
-              {{ form.description.label }}<span style="color: red;">*</span>
+              {{ form.description.label }}
               {{ form.description(rows=5) }}
               {% for error in form.description.errors %}
                 <span style="color: red;">[{{ error }}]</span>
               {% endfor %}
             </p>
             <p class="form-login--field">
-              {{ form.parent.label }}<span style="color: red;">*</span>
+              {{ form.parent.label }}
               {{ form.parent() }}
               {% for error in form.parent.errors %}
                 <span style="color: red;">[{{ error }}]</span>

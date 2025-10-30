@@ -1,5 +1,5 @@
 from flask import request, render_template, flash, redirect, url_for
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from werkzeug.security import generate_password_hash
 
@@ -61,8 +61,9 @@ def dashboard():
 #     return send_from_directory(app.root_path, 'sitemap.xml')
 
 
-@app.route("/dash/categories", methods=["GET"])
-def list_categories():
+@login_required
+@app.route("/dash/categories", methods=["GET", "POST"])
+def categories():
     active_only = request.args.get('active_only', 'true').lower() == 'true'
     query = Category.query
     if active_only:
@@ -72,6 +73,28 @@ def list_categories():
         cat.children
 
     form = CategoryForm()
+    if request.method=="POST":
+        if form.validate_on_submit():
+            if form.submit_new.data:
+                if not Category.query.filter_by(name=form.name.data).first():
+                    category = Category(
+                        name=form.name.data,
+                        description=form.description.data,
+                        parent_id=form.parent.data.id if form.parent.data else None
+                    )
+                    print(
+                        category.name,
+                        category.description,
+                        category.parent_id,
+                        category.children,
+                        category.active
+                    )
+                    db.session.add(category)
+                    db.session.commit()
+                    flash(f'Категория {category.name} добавлена успешно! 🚀')
+                    categories.append(category)
+                else:
+                    flash('Категория с таким названием уже существует! Выбери другое имя.', 'error')
 
     return render_template('categories.html',
                            title="Категории",
@@ -80,3 +103,18 @@ def list_categories():
                            form=form)
 
 
+@login_required
+@app.route('/dash/categories/<string:name>')
+def category(name):
+    category = Category.query.filter_by(name=name).first()
+    form = CategoryForm()
+    form.name.data = category.name
+    form.description.data = category.description
+    form.active.data = category.active
+    # form.data.parent = category.parent
+    if category:
+        print(category)
+    return render_template('category.html',
+                           title=f"Категория {category.name}",
+                           category=category,
+                           form=form)
