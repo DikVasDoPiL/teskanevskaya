@@ -19,15 +19,6 @@
           </div>
         </div>
         <div class="form-category--field">
-          <div>{{ form.active.label }}</div>
-          <div class="field--checkbox">
-            {{ form.active() }}
-            {% for error in form.name.errors %}
-              <span>[{{ error }}]</span>
-            {% endfor %}
-          </div>
-        </div>
-        <div class="form-category--field">
           <div>{{ form.description.label }}</div>
           <div class="field-textarea">
             {{ form.description() }}
@@ -37,15 +28,19 @@
           </div>
         </div>
         <div class="form-category--field">
-          <div>{{ form.parent.label }}</div>
+          <div>{{ form.active.label }}</div>
           <div class="field-select">
-            {{ form.parent() }}
-            {% for error in form.parent.errors %}
+            {{ form.active() }}
+            {% for error in form.active.errors %}
               <span>[{{ error }}]</span>
             {% endfor %}
           </div>
         </div>
-        <p class="form-login--submit">{{ form.submit_save() }}</p>
+        <div class="form-submits">
+          <div class="form-submit">{{ form.submit_save() }}</div>
+          <div class="form-submit">{{ form.submit_cancel() }}</div>
+        </div>
+
       </form>
 {% endblock %}
 

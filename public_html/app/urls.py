@@ -65,28 +65,20 @@ def dashboard():
 @app.route("/dash/categories", methods=["GET", "POST"])
 def categories():
     active_only = request.args.get('active_only', 'true').lower() == 'true'
-    query = Category.query
-    if active_only:
-        query = query.filter_by(active=True)
-    categories = query.order_by(Category.name).all()
-    for cat in categories:
-        cat.children
+    categories = Category.query.order_by(Category.name).all()
 
     form = CategoryForm()
     if request.method=="POST":
         if form.validate_on_submit():
             if form.submit_new.data:
                 if not Category.query.filter_by(name=form.name.data).first():
-                    category = Category(
-                        name=form.name.data,
-                        description=form.description.data,
-                        parent_id=form.parent.data.id if form.parent.data else None
-                    )
+                    category = Category()
+                    form.populate_obj(category)
                     print(
                         category.name,
                         category.description,
-                        category.parent_id,
-                        category.children,
+                        # category.parent_id,
+                        # category.children,
                         category.active
                     )
                     db.session.add(category)
@@ -95,6 +87,7 @@ def categories():
                     categories.append(category)
                 else:
                     flash('Категория с таким названием уже существует! Выбери другое имя.', 'error')
+                    redirect(url_for("categories"), code=301)
 
     return render_template('categories.html',
                            title="Категории",
@@ -104,16 +97,31 @@ def categories():
 
 
 @login_required
-@app.route('/dash/categories/<string:name>')
+@app.route('/dash/categories/<string:name>', methods=["GET", "POST"])
 def category(name):
     category = Category.query.filter_by(name=name).first()
-    form = CategoryForm()
-    form.name.data = category.name
-    form.description.data = category.description
-    form.active.data = category.active
-    # form.data.parent = category.parent
+    if not category:
+        return redirect(url_for('categories'))
+    form = CategoryForm(obj=category)
     if category:
         print(category)
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            print(category)
+            if form.submit_save.data:
+                form.populate_obj(category)
+                db.session.commit()
+                flash(f'Категория [{category.name}] сохранена! 😊')
+                return redirect(url_for('categories'))
+            if form.submit_cancel.data:
+                return redirect(url_for('categories'))
+        return render_template('category.html',
+                               title=f"Категория {category.name}",
+                               category=category,
+                               form=form)
+        # return redirect(url_for('category'))
+
     return render_template('category.html',
                            title=f"Категория {category.name}",
                            category=category,

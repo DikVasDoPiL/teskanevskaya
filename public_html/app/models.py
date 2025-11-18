@@ -34,11 +34,12 @@ class Category(db.Model):
     active = db.Column(db.Boolean, default=True)
 
     # Внешний ключ на саму себя для родителя
-    parent_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
+    # parent_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
 
     # Связи: дети (один-ко-многим) и родитель (многие-к-одному)
-    children = db.relationship('Category', backref=db.backref('parent', remote_side=[id]),
-                               lazy=True, cascade='all, delete-orphan')
+    # children = db.relationship('Category', backref=db.backref('parent', remote_side=[id]),
+    #                            lazy=True, cascade='all, delete-orphan')
 
     def __repr__(self):
         return f'<Category {self.name}>'
+
