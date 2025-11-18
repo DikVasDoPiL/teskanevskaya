@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -42,4 +44,18 @@ class Category(db.Model):
 
     def __repr__(self):
         return f'<Category {self.name}>'
+
+
+class Promotion(db.Model):
+    __tablename__ = 'promotions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), nullable=False, unique=True)
+    description = db.Column(db.Text, nullable=True)
+    start = db.Column(db.DateTime, default=datetime.now, nullable=False)
+    end = db.Column(db.DateTime, default=True, nullable=False)
+
+    def __repr__(self):
+        return f'<Promotion {self.name} from {self.start} to {self.end}>'
+
 

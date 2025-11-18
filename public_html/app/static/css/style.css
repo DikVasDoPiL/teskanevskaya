@@ -200,32 +200,53 @@ article {
     color: red;
 }
 
-.categories {
-    display: grid;
+.categories,
+.promotions {
+    display: flex;
+    flex-direction: column;
     gap: 0.25rem;
 }
 
+.categories-header,
 .category,
-.categories-header {
+.promotions-header,
+.promotion {
     display: grid;
-    grid-template-columns: 2fr 3fr 1fr;
     padding: 0.5rem;
 }
 
-.categories-header {
-/*    background-color: #ff6b0040; */
-    background-color: #0001
+.categories-header,
+.category {
+    grid-template-columns: 2fr 3fr 1fr;
 }
 
-.category {
+.promotions-header,
+.promotion {
+    grid-template-columns: 2fr 3fr 1fr 1fr;
+}
+
+.categories-header,
+.promotions-header {
+    background-color: #0001;
+}
+
+.category,
+.promotion {
     text-decoration: none;
     color: #333;
     border-bottom: 1px solid #333;
 }
 
-.category:hover {
+.category:hover,
+.promotion:hover {
     color: var(--color-heads-color);
     transition: 0.2s ease-in-out;
+}
+
+.cat-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .form-category {
@@ -480,7 +501,8 @@ footer a {
      inset +0.75px +0.5px rgba(255, 255, 255, 0.4);
 }
 
-.form-submit > input#submit_save {
+.form-submit > input#submit_save,
+.form-submit > input#submit_new {
     color: white;
     background-color: green;
 }
@@ -490,7 +512,8 @@ footer a {
     background-color: red;
 }
 
-.form-submit > input#submit_cancel:hover {
+.form-submit > input#submit_cancel:hover,
+.form-submit > input#submit_new:hover {
     background-color: rgb(255, 125, 0);
 }
 

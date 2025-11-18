@@ -4,8 +4,8 @@ import sqlalchemy as sa
 from werkzeug.security import generate_password_hash
 
 from . import app, db
-from .forms import LoginForm, CategoryForm
-from .models import User, Category
+from .forms import LoginForm, CategoryForm, PromotionForm
+from .models import User, Category, Promotion
 
 
 @app.route('/', methods=['get'])
@@ -64,11 +64,9 @@ def dashboard():
 @login_required
 @app.route("/dash/categories", methods=["GET", "POST"])
 def categories():
-    active_only = request.args.get('active_only', 'true').lower() == 'true'
-    categories = Category.query.order_by(Category.name).all()
-
+    categories_all = Category.query.order_by(Category.name).all()
     form = CategoryForm()
-    if request.method=="POST":
+    if request.method == "POST":
         if form.validate_on_submit():
             if form.submit_new.data:
                 if not Category.query.filter_by(name=form.name.data).first():
@@ -84,15 +82,16 @@ def categories():
                     db.session.add(category)
                     db.session.commit()
                     flash(f'Категория {category.name} добавлена успешно! 🚀')
-                    categories.append(category)
+                    categories_all.append(category)
                 else:
-                    flash('Категория с таким названием уже существует! Выбери другое имя.', 'error')
+                    flash('Категория с таким названием уже существует! Выберите другое имя.', 'error')
                     redirect(url_for("categories"), code=301)
+        else:
+            flash('Ошибка создания записи, заполните корректно поля формы', 'error')
 
     return render_template('categories.html',
                            title="Категории",
-                           categories=categories,
-                           active_only=active_only,
+                           categories=categories_all,
                            form=form)
 
 
@@ -110,9 +109,12 @@ def category(name):
         if form.validate_on_submit():
             print(category)
             if form.submit_save.data:
-                form.populate_obj(category)
-                db.session.commit()
-                flash(f'Категория [{category.name}] сохранена! 😊')
+                if not Category.query.filter_by(name=form.name.data).first():
+                    form.populate_obj(category)
+                    db.session.commit()
+                    flash(f'Категория [{category.name}] сохранена! 😊')
+                else:
+                    flash('Категория с таким названием уже существует! Выберите другое имя.', 'error')
                 return redirect(url_for('categories'))
             if form.submit_cancel.data:
                 return redirect(url_for('categories'))
@@ -125,4 +127,49 @@ def category(name):
     return render_template('category.html',
                            title=f"Категория {category.name}",
                            category=category,
+                           form=form)
+
+
+@login_required
+@app.route("/dash/promotions", methods=["GET", "POST"])
+def promotions():
+    promotions_all = Promotion.query.order_by(Promotion.name).all()
+
+    form = PromotionForm()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            if form.submit_new.data:
+                if Promotion.query.filter_by(name=form.name.data).first():
+                    flash('Такая акция уже существует! Выберите другое имя.', 'error')
+                else:
+                    promo = Promotion()
+                    form.populate_obj(promo)
+                    print(
+                        promo.name,
+                        promo.description
+                    )
+                    db.session.add(promo)
+                    db.session.commit()
+                    flash(f'Категория {promo.name} добавлена успешно! 🚀')
+                    promotions_all.append(promo)
+        else:
+            flash('Ошибка создания записи, заполните корректно поля формы', 'error')
+
+    return render_template('promotions.html',
+                           title="Категории",
+                           promotions=promotions_all,
+                           form=form)
+
+@login_required
+@app.route("/dash/promotions/<string:name>", methods=["GET", "POST"])
+def promotion(name):
+    promotion = Category.query.filter_by(name=name).first()
+    if not promotion:
+        return redirect(url_for('promotions'))
+    form = PromotionForm(obj=promotion)
+    if category:
+        print(category)
+    return render_template('promotions.html',
+                           title="Промоакции",
+                           promotion=promotion,
                            form=form)

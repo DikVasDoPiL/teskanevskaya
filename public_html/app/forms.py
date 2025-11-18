@@ -1,9 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, DateField
 from wtforms.validators import DataRequired, Optional, Length
-from wtforms_sqlalchemy.fields import QuerySelectField
-
-from .models import Category
+from wtforms.widgets import DateInput
 
 DATA_REQUIRED_MESSAGE = "Необходимо заполнить"
 
@@ -19,9 +17,12 @@ class LoginForm(FlaskForm):
 
 
 class CategoryForm(FlaskForm):
-    name = StringField('Название', validators=[DataRequired(DATA_REQUIRED_MESSAGE), Length(min=1, max=64)])
-    description = TextAreaField('Описание', validators=[Optional()])
-    active = BooleanField('Включено', default=True)
+    name = StringField('Название', validators=[DataRequired(DATA_REQUIRED_MESSAGE), Length(min=3, max=64)])
+    description = TextAreaField('Описание', validators=[
+        Optional(),
+        Length(max=500, message='Максимум 500 символов')
+    ])
+    active = BooleanField('Активно', default=True)
     # QuerySelectField для parent_id: выбор из активных категорий (исключая текущую)
     # parent = QuerySelectField(
     #     label='Родительская категория',
@@ -33,5 +34,29 @@ class CategoryForm(FlaskForm):
     # )
     submit_new = SubmitField('Создать')
     submit_save = SubmitField('Сохранить')
-    submit_cancel = SubmitField('Закрыть')
-    submit_delete = SubmitField('Удалить')
+    submit_cancel = SubmitField('Отмена')
+    submit_end = SubmitField('Завершить')
+
+
+class PromotionForm(FlaskForm):
+    name = StringField('Название', validators=[
+        DataRequired(message='Название обязательно'),
+        Length(min=3, max=64, message='Максимум 64 символа')
+    ])
+    description = TextAreaField('Описание', validators=[
+        Optional(),
+        Length(max=500, message='Максимум 500 символов')
+    ])
+    start = DateField('Начало', format='%Y-%m-%d', widget=DateInput(), validators=[
+        DataRequired(message='Дата начала обязательно'),
+        Optional()
+    ])
+    end = DateField('Конец', format='%Y-%m-%d', widget=DateInput(), validators=[
+        DataRequired(message='Дата окончания обязательно'),
+        Optional()
+    ])
+    submit_new = SubmitField('Создать')
+    submit_save = SubmitField('Сохранить')
+    submit_cancel = SubmitField('Отмена')
+    submit_end = SubmitField('Завершить')
+

@@ -1,7 +1,7 @@
 {% extends "private.html" %}
 
 {% block title %}
-    Категории:
+    Промоакции:
 {% endblock %}
 
 {% block article %}
@@ -12,24 +12,28 @@
         <button class="cat-btn grey-btn" type="button" onclick="overlayMenu.showModal()">Добавить</button>
     </div>
 
-    <div class="categories">
-        <header class="categories-header">
+    <div class="promotions">
+        <header class="promotions-header">
 
-            <div class="cat-name">Категория</div>
-            <div class="cat-description">Описание</div>
-            <div class="cat-status">Состояние</div>
+            <div class="promo-name">Наименование</div>
+            <div class="promo-description">Описание</div>
+            <div class="promo-start">Начало</div>
+            <div class="promo-end">Окончание</div>
         </header>
-    {% for cat in categories %}
-        <a class="category" href="{{ url_for('category', name=cat.name) }}">
+    {% for promo in promotions %}
+        <a class="promotion" href="{{ url_for('promotion', name=promo.name) }}">
 
-            <div class="cat-name">
-                {{ cat.name }}
+            <div class="promo-name">
+                {{ promo.name }}
             </div>
-            <div class="cat-description">
-                {{ cat.description if cat.description else '---' }}
+            <div class="promo-description">
+                {{ promo.description if promo.description else '---' }}
             </div>
-            <div class="cat-status">
-                {{ "✅" if cat.active else "❌" }}
+            <div class="promo-start">
+                {{ promo.start.strftime('%Y-%m-%d') if promo.start else "❌" }}
+            </div>
+            <div class="promo-end">
+                {{ promo.end.strftime('%Y-%m-%d') if promo.end else "❌" }}
             </div>
         </a>
     {% endfor %}
@@ -40,7 +44,7 @@
 
     {% block modal %}
 
-          <h3>Добавление категории</h3>
+          <h3>Добавление промоакции</h3>
           <form id="form-category" class="form-login" action="" method="post" novalidate>
             {{ form.hidden_tag() }}
             <p class="form-login--field">
@@ -57,12 +61,19 @@
               {% endfor %}
               {{ form.description(rows=5) }}
             </p>
-            <p class="form-field">
-              {{ form.active.label }}
-              {% for error in form.description.errors %}
+            <p class="form-login--field">
+              {{ form.start.label }}<span style="color: red;">*</span>
+              {% for error in form.start.errors %}
                 <span style="color: red;">[{{ error }}]</span>
               {% endfor %}
-              {{ form.active() }}
+              {{ form.start() }}
+            </p>
+            <p class="form-login--field">
+              {{ form.end.label }}<span style="color: red;">*</span>
+              {% for error in form.end.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+              {% endfor %}
+              {{ form.end() }}
             </p>
               <div class="form-submits">
                   <div class="form-submit">{{ form.submit_new() }}</div>
