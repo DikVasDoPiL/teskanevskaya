@@ -3,10 +3,12 @@
 	--wrapper-big: 64rem;
 	--wrapper-middle: 50rem;
 	--wrapper-small: 25rem;
-	--color-btn-hover: rgb(58, 206, 0);
+	--color-green-hover: rgb(58, 206, 0);
+	--color-red-hover: rgb(255, 125, 0);
 	--color-heads-color: #ff6b00;
 	--color-background: #f7f7f7;
 	--color-shadow: #000000A0;
+	--base-transition: 0.2s ease-in-out;
 }
 
 body {
@@ -187,7 +189,7 @@ header.header {
 
 .top-menu--item:hover {
     border-bottom: 2px solid rgba(255,255,255,0.5);
-    transition: 0.2s ease-in-out;
+    transition: var(--base-transition);
 }
 
 article {
@@ -200,47 +202,41 @@ article {
     color: red;
 }
 
-.categories,
-.promotions {
+.table {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
 }
 
-.categories-header,
-.category,
-.promotions-header,
-.promotion {
+.table-header,
+.table-row {
     display: grid;
     padding: 0.5rem;
 }
 
 .categories-header,
-.category {
+.categories-row {
     grid-template-columns: 2fr 3fr 1fr;
 }
 
 .promotions-header,
-.promotion {
+.promotions-row {
     grid-template-columns: 2fr 3fr 1fr 1fr;
 }
 
-.categories-header,
-.promotions-header {
+.table-header {
     background-color: #0001;
 }
 
-.category,
-.promotion {
+.table-row {
     text-decoration: none;
     color: #333;
     border-bottom: 1px solid #333;
 }
 
-.category:hover,
-.promotion:hover {
+.table-row:hover {
     color: var(--color-heads-color);
-    transition: 0.2s ease-in-out;
+    transition: var(--base-transition);
 }
 
 .cat-status {
@@ -249,7 +245,26 @@ article {
     align-items: center;
 }
 
-.form-category {
+.form-login {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-modal > .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+
+.form-edit {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
@@ -265,6 +280,89 @@ article {
     margin: 0;
     width: 1.5rem;
     height: 1.5rem;
+}
+
+.form-input {
+    min-width: 360px;
+    max-width: 30rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-field,
+.form-field--checkbox {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 2fr 3fr;
+}
+
+.form-field--label,
+.form-field--input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    align-content: center;
+ }
+
+.field-input,
+.date-input {
+    width: 100%;
+}
+
+.field-input,
+.date-input,
+.chekcbox-input {
+    margin: 0;
+    padding: 0.25rem;
+    font-size: 1rem;
+    border-radius: 0.25em;
+    border: 1px solid grey;
+}
+
+.chekcbox-input {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.form-submit {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.25em;
+    border: none;
+    box-shadow:
+	 /* Нижний и правый */
+     inset -0.75px -0.5px rgba(0, 0, 0, 0.4),
+    /* Верхний и левый */
+     inset +0.75px +0.5px rgba(255, 255, 255, 0.4);
+}
+
+.form-submits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: end;
+}
+
+.submit-green {
+    color: white;
+    background-color: green;
+}
+
+.submit-red {
+    color: white;
+    background-color: red;
+}
+
+.submit-green:hover {
+    background-color: var(--color-green-hover);
+    transition: var(--base-transition);
+}
+
+.submit-red:hover {
+    background-color: var(--color-red-hover);
+    transition: var(--base-transition);
 }
 
 .btn {
@@ -309,12 +407,12 @@ article {
     text-decoration: none;
     text-transform: uppercase;
     color: #333;
-    transition: 0.2s ease-in-out;
+    transition: var(--base-transition);
 }
 
 .admin-menu--item:hover {
     color: #ff6b00;
-    transition: 0.2s ease-in-out;
+    transition: var(--base-transition);
 }
 
 .admin-menu--item__active {
@@ -464,63 +562,6 @@ footer a {
 	width: 300px;
 }
 
-.form-login {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.form-login--field input,
-.form-login--field select {
-    padding: 0.25rem 0.75rem;
-    font-size: 1rem;
-    border-radius: 0.25rem;
-    border: 1px solid gray;
-    line-height: 2rem;
-}
-
-.form-submits {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.form-submit > * {
-    padding: 0.25rem 1.25rem;
-    border-radius: 0.25rem;
-    font-size: 1rem;
-    line-height: 2rem;
-    font-weight: bold;
-    display: block;
-    transition: 0.2s ease-in-out;
-    border: none;
-    box-shadow:
-	 /* Нижний и правый */
-     inset -0.75px -0.5px rgba(0, 0, 0, 0.4),
-    /* Верхний и левый */
-     inset +0.75px +0.5px rgba(255, 255, 255, 0.4);
-}
-
-.form-submit > input#submit_save,
-.form-submit > input#submit_new {
-    color: white;
-    background-color: green;
-}
-
-.form-submit > input#submit_cancel {
-    color: white;
-    background-color: red;
-}
-
-.form-submit > input#submit_cancel:hover,
-.form-submit > input#submit_new:hover {
-    background-color: rgb(255, 125, 0);
-}
-
-.form-submit > input#submit_save:hover {
-    background-color: var(--color-btn-hover);
-}
-
 .cat-menu {
     display: flex;
     gap: 1rem;
@@ -576,19 +617,6 @@ dialog[open], dialog[open]::backdrop {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-}
-
-#form-category .form-login--field input,
-#form-category .form-login--field textarea {
-    border: 1px solid #aaa;
-    border-radius: 0.25rem;
-    width: 100%;
-    padding: 0.25rem;
-}
-
-
-.form-login--field textarea {
-    width: 100%;
 }
 
 /* CONTAINER REQUEST */
@@ -686,8 +714,8 @@ dialog[open], dialog[open]::backdrop {
 
 @media (hover: hover) {
   .btn:hover {
-    background-color: var(--color-btn-hover);
-    transition: linear 0.1s;
+    background-color: var(--color-green-hover);
+    transition: var(--base-transition);
   }
   
   .shield:hover .shield-inner {
@@ -696,6 +724,6 @@ dialog[open], dialog[open]::backdrop {
 
   .cat-btn:hover {
     background-color: var(--color-heads-color);
-    transition: 0.2s ease-in-out;
+    transition: var(--base-transition);
   }
 }

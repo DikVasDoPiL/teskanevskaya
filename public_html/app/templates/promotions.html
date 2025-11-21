@@ -12,32 +12,23 @@
         <button class="cat-btn grey-btn" type="button" onclick="overlayMenu.showModal()">Добавить</button>
     </div>
 
-    <div class="promotions">
-        <header class="promotions-header">
-
-            <div class="promo-name">Наименование</div>
+    <div class="table">
+        <header class="table-header promotions-header">
+            <div class="promo-name">Категория</div>
             <div class="promo-description">Описание</div>
             <div class="promo-start">Начало</div>
             <div class="promo-end">Окончание</div>
         </header>
     {% for promo in promotions %}
-        <a class="promotion" href="{{ url_for('promotion', name=promo.name) }}">
-
-            <div class="promo-name">
-                {{ promo.name }}
-            </div>
-            <div class="promo-description">
-                {{ promo.description if promo.description else '---' }}
-            </div>
-            <div class="promo-start">
-                {{ promo.start.strftime('%Y-%m-%d') if promo.start else "❌" }}
-            </div>
-            <div class="promo-end">
-                {{ promo.end.strftime('%Y-%m-%d') if promo.end else "❌" }}
-            </div>
+        <a class="table-row promotions-row" href="{{ url_for('promotion', name=promo.name) }}">
+            <div class="promo-name">{{ promo.name }}</div>
+            <div class="promo-description">{{ promo.description if promo.description else '---' }}</div>
+            <div class="promo-start">{{ promo.start.strftime('%Y-%m-%d') if promo.start else "❌" }}</div>
+            <div class="promo-end">{{ promo.end.strftime('%Y-%m-%d') if promo.end else "❌" }}</div>
         </a>
     {% endfor %}
     </div>
+
 
 
 {% endblock %}
@@ -46,38 +37,38 @@
 
           <h3>Добавление промоакции</h3>
           <form id="form-category" class="form-login" action="" method="post" novalidate>
-            {{ form.hidden_tag() }}
-            <p class="form-login--field">
-              {{ form.name.label }}<span style="color: red;">*</span>
-              {% for error in form.name.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-              {% endfor %}
-              {{ form.name(size=32) }}
-            </p>
-            <p class="form-login--field">
-              {{ form.description.label }}
-              {% for error in form.description.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-              {% endfor %}
-              {{ form.description(rows=5) }}
-            </p>
-            <p class="form-login--field">
-              {{ form.start.label }}<span style="color: red;">*</span>
-              {% for error in form.start.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-              {% endfor %}
-              {{ form.start() }}
-            </p>
-            <p class="form-login--field">
-              {{ form.end.label }}<span style="color: red;">*</span>
-              {% for error in form.end.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-              {% endfor %}
-              {{ form.end() }}
-            </p>
-              <div class="form-submits">
-                  <div class="form-submit">{{ form.submit_new() }}</div>
-              </div>
+                {{ form.hidden_tag() }}
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.name.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.name(class="field-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">{{ form.description.label(class="field-label") }}</div>
+                    <div class="form-field--input">{{ form.description(class="field-input", rows=5) }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.start.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.start(class="date-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.end.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.end(class="date-input") }}</div>
+                </div>
+
+                <div class="form-submits">{{ form.submit_new(class="form-submit submit-green") }}</div>
 
           </form>
 

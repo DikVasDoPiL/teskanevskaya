@@ -1,7 +1,11 @@
+import os
+from datetime import datetime
+
 from flask import request, render_template, flash, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from werkzeug.security import generate_password_hash
+from werkzeug.utils import secure_filename
 
 from . import app, db
 from .forms import LoginForm, CategoryForm, PromotionForm
@@ -66,25 +70,19 @@ def dashboard():
 def categories():
     categories_all = Category.query.order_by(Category.name).all()
     form = CategoryForm()
+
     if request.method == "POST":
         if form.validate_on_submit():
             if form.submit_new.data:
+                cat_new = Category()
+                form.populate_obj(cat_new)
                 if not Category.query.filter_by(name=form.name.data).first():
-                    category = Category()
-                    form.populate_obj(category)
-                    print(
-                        category.name,
-                        category.description,
-                        # category.parent_id,
-                        # category.children,
-                        category.active
-                    )
-                    db.session.add(category)
+                    db.session.add(cat_new)
                     db.session.commit()
-                    flash(f'Категория {category.name} добавлена успешно! 🚀')
+                    flash(f'Категория {cat_new.name} добавлена успешно! 🚀')
                     categories_all.append(category)
                 else:
-                    flash('Категория с таким названием уже существует! Выберите другое имя.', 'error')
+                    flash(f'Категория  {cat_new.name}  уже существует! Выберите другое имя.', 'error')
                     redirect(url_for("categories"), code=301)
         else:
             flash('Ошибка создания записи, заполните корректно поля формы', 'error')
@@ -98,36 +96,32 @@ def categories():
 @login_required
 @app.route('/dash/categories/<string:name>', methods=["GET", "POST"])
 def category(name):
-    category = Category.query.filter_by(name=name).first()
-    if not category:
+    cat = Category.query.filter_by(name=name).first()
+    if not cat:
         return redirect(url_for('categories'))
-    form = CategoryForm(obj=category)
-    if category:
-        print(category)
+    form = CategoryForm(obj=cat)
 
     if request.method == "POST":
         if form.validate_on_submit():
-            print(category)
+            target_obj = Category.query.filter_by(name=form.name.data).first()
             if form.submit_save.data:
-                if not Category.query.filter_by(name=form.name.data).first():
-                    form.populate_obj(category)
+                print("submit_save:", target_obj)
+                if not target_obj or cat.id == target_obj.id:
+                    form.populate_obj(cat)
                     db.session.commit()
-                    flash(f'Категория [{category.name}] сохранена! 😊')
+                    flash(f'Категория [{cat.name}] сохранена! 😊')
+                    return redirect(url_for('categories'))
                 else:
-                    flash('Категория с таким названием уже существует! Выберите другое имя.', 'error')
-                return redirect(url_for('categories'))
+                    print("error_save:", target_obj)
+                    flash(f'Категория {target_obj.name} уже существует! Выберите другое имя.', 'error')
+                    render_template('category.html',
+                                    title="Редактирование категории",
+                                    form=form)
             if form.submit_cancel.data:
                 return redirect(url_for('categories'))
-        return render_template('category.html',
-                               title=f"Категория {category.name}",
-                               category=category,
-                               form=form)
-        # return redirect(url_for('category'))
-
     return render_template('category.html',
-                           title=f"Категория {category.name}",
-                           category=category,
-                           form=form)
+                               title=f"Категория {name}",
+                               form=form)
 
 
 @login_required
@@ -141,13 +135,11 @@ def promotions():
             if form.submit_new.data:
                 if Promotion.query.filter_by(name=form.name.data).first():
                     flash('Такая акция уже существует! Выберите другое имя.', 'error')
+                elif form.end.data < datetime.date(datetime.now()):
+                    flash('Дата окончания акции не может быть раньше сегодня', 'error')
                 else:
                     promo = Promotion()
                     form.populate_obj(promo)
-                    print(
-                        promo.name,
-                        promo.description
-                    )
                     db.session.add(promo)
                     db.session.commit()
                     flash(f'Категория {promo.name} добавлена успешно! 🚀')
@@ -163,13 +155,39 @@ def promotions():
 @login_required
 @app.route("/dash/promotions/<string:name>", methods=["GET", "POST"])
 def promotion(name):
-    promotion = Category.query.filter_by(name=name).first()
+    promotion = Promotion.query.filter_by(name=name).first()
     if not promotion:
         return redirect(url_for('promotions'))
     form = PromotionForm(obj=promotion)
-    if category:
-        print(category)
-    return render_template('promotions.html',
-                           title="Промоакции",
-                           promotion=promotion,
-                           form=form)
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            target_obj = Promotion.query.filter_by(name=form.name.data).first()
+            if form.submit_save.data:
+                print("submit_save:", target_obj)
+                if not target_obj or promotion.id == target_obj.id:
+                    if form.end.data < datetime.date(datetime.now()):
+                        flash(f'Промоакция {form.name.data} завершена!', 'error')
+                    form.populate_obj(promotion)
+                    filename = secure_filename(form.image.data.filename)
+                    unique_filename = target_obj.image_path
+                    if filename:
+                        unique_filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{filename}"
+                        filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+                        # form.image.data.save(filepath)
+                        form.image.data.filename = unique_filename
+                    promotion.image_path = unique_filename
+                    db.session.commit()
+                    flash(f'Промоакция [{promotion.name}] сохранена! 😊')
+                    return redirect(url_for('promotions'))
+                else:
+                    print("error_save:", target_obj)
+                    flash(f'Промоакция {target_obj.name} уже существует! Выберите другое имя.', 'error')
+                    render_template('promotion.html',
+                                    title="Редактирование промоакции",
+                                    form=form)
+            if form.submit_cancel.data:
+                return redirect(url_for('promotions'))
+    return render_template('promotion.html',
+                               title=f"Промоакция {name}",
+                               form=form)

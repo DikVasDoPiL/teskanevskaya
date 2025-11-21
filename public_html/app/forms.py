@@ -1,6 +1,9 @@
+
+
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, DateField
-from wtforms.validators import DataRequired, Optional, Length
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, DateField, IntegerField
+from wtforms.validators import DataRequired, Optional, Length, NumberRange
 from wtforms.widgets import DateInput
 
 DATA_REQUIRED_MESSAGE = "Необходимо заполнить"
@@ -17,6 +20,7 @@ class LoginForm(FlaskForm):
 
 
 class CategoryForm(FlaskForm):
+    id = IntegerField()
     name = StringField('Название', validators=[DataRequired(DATA_REQUIRED_MESSAGE), Length(min=3, max=64)])
     description = TextAreaField('Описание', validators=[
         Optional(),
@@ -39,6 +43,8 @@ class CategoryForm(FlaskForm):
 
 
 class PromotionForm(FlaskForm):
+    id = IntegerField()
+
     name = StringField('Название', validators=[
         DataRequired(message='Название обязательно'),
         Length(min=3, max=64, message='Максимум 64 символа')
@@ -55,6 +61,10 @@ class PromotionForm(FlaskForm):
         DataRequired(message='Дата окончания обязательно'),
         Optional()
     ])
+    image_path = FileField('Изображение', validators=[
+        FileAllowed(['jpg', 'png', 'jpeg', 'svg'], "Только изображения jpg, png, jpeg, svg!")
+    ])
+
     submit_new = SubmitField('Создать')
     submit_save = SubmitField('Сохранить')
     submit_cancel = SubmitField('Отмена')

@@ -54,6 +54,7 @@ class Promotion(db.Model):
     description = db.Column(db.Text, nullable=True)
     start = db.Column(db.DateTime, default=datetime.now, nullable=False)
     end = db.Column(db.DateTime, default=True, nullable=False)
+    image_path = db.Column(db.String(255), nullable=True)
 
     def __repr__(self):
         return f'<Promotion {self.name} from {self.start} to {self.end}>'

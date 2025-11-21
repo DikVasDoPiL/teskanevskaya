@@ -7,8 +7,13 @@
 {% block article %}
 
 <h2>{{title}}</h2>
-      <form id="form-category" class="form-input" action="" method="post">
+
+      <form id="form-promotion" class="form-input" action="" method="post" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
+            <div class="form-field">
+                {{ form.image_path.label }}
+                {{ form.image_path(class="form-control") }}
+            </div>
             <div class="form-field">
                 <div class="form-field--label">
                     {{ form.name.label(class="field-label") }}
@@ -24,16 +29,24 @@
 
             <div class="form-field">
                 <div class="form-field--label">
-                    {{ form.active.label(class="field-label") }}
+                    {{ form.start.label(class="field-label") }}
+                    <span style="color: red;">*</span>
                 </div>
-                <div class="form-field--input">{{ form.active(class="chekcbox-input") }}</div>
+                <div class="form-field--input">{{ form.start(class="date-input") }}</div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field--label">
+                    {{ form.end.label(class="field-label") }}
+                    <span style="color: red;">*</span>
+                </div>
+                <div class="form-field--input">{{ form.end(class="date-input") }}</div>
             </div>
 
             <div class="form-submits">
               {{ form.submit_save(class="form-submit submit-green") }}
               {{ form.submit_cancel(class="form-submit submit-red") }}
             </div>
-
       </form>
 {% endblock %}
 

@@ -12,25 +12,17 @@
         <button class="cat-btn grey-btn" type="button" onclick="overlayMenu.showModal()">Добавить</button>
     </div>
 
-    <div class="categories">
-        <header class="categories-header">
-
+    <div class="table">
+        <header class="table-header categories-header">
             <div class="cat-name">Категория</div>
             <div class="cat-description">Описание</div>
             <div class="cat-status">Состояние</div>
         </header>
     {% for cat in categories %}
-        <a class="category" href="{{ url_for('category', name=cat.name) }}">
-
-            <div class="cat-name">
-                {{ cat.name }}
-            </div>
-            <div class="cat-description">
-                {{ cat.description if cat.description else '---' }}
-            </div>
-            <div class="cat-status">
-                {{ "✅" if cat.active else "❌" }}
-            </div>
+        <a class="table-row categories-row" href="{{ url_for('category', name=cat.name) }}">
+            <div class="cat-name">{{ cat.name }}</div>
+            <div class="cat-description">{{ cat.description if cat.description else '---' }}</div>
+            <div class="cat-status">{{ "✅" if cat.active else "❌" }}</div>
         </a>
     {% endfor %}
     </div>
@@ -41,32 +33,27 @@
     {% block modal %}
 
           <h3>Добавление категории</h3>
-          <form id="form-category" class="form-login" action="" method="post" novalidate>
-            {{ form.hidden_tag() }}
-            <p class="form-login--field">
-              {{ form.name.label }}<span style="color: red;">*</span>
-              {% for error in form.name.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-              {% endfor %}
-              {{ form.name(size=32) }}
-            </p>
-            <p class="form-login--field">
-              {{ form.description.label }}
-              {% for error in form.description.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-              {% endfor %}
-              {{ form.description(rows=5) }}
-            </p>
-            <p class="form-field">
-              {{ form.active.label }}
-              {% for error in form.description.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-              {% endfor %}
-              {{ form.active() }}
-            </p>
-              <div class="form-submits">
-                  <div class="form-submit">{{ form.submit_new() }}</div>
-              </div>
+          <form id="form-category" class="form-modal" action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.name.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.name(class="field-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">{{ form.description.label(class="field-label") }}</div>
+                    <div class="form-field--input">{{ form.description(class="field-input", rows=5) }}</div>
+                </div>
+
+                <div class="form-field--checkbox">
+                    <div class="form-field--label">{{ form.active.label(class="field-label") }}</div>
+                    <div class="form-field--input">{{ form.active(class="checkbox-input") }}</div>
+                </div>
+
+                <div class="form-submits">{{ form.submit_new(class="form-submit submit-green") }}</div>
 
           </form>
 
