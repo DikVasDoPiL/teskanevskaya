@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 
+from PIL import Image
 from flask import request, render_template, flash, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
@@ -60,6 +61,8 @@ def logout():
 @app.route("/dash", methods=["GET"])
 def dashboard():
     return render_template('dashboard.html', title="Панель управления")
+
+
 # @app.route('/sitemap.xml')
 # def serve_robots_sitemap():
 #     return send_from_directory(app.root_path, 'sitemap.xml')
@@ -120,8 +123,8 @@ def category(name):
             if form.submit_cancel.data:
                 return redirect(url_for('categories'))
     return render_template('category.html',
-                               title=f"Категория {name}",
-                               form=form)
+                           title=f"Категория {name}",
+                           form=form)
 
 
 @login_required
@@ -152,33 +155,64 @@ def promotions():
                            promotions=promotions_all,
                            form=form)
 
+
+def replace_image(data, old_path):
+    filename = "_".join([
+        str(datetime.timestamp(datetime.now())),
+        secure_filename(data.filename)
+    ])
+
+    # Folder configs
+    full_folder = os.path.join(app.config['UPLOAD_FOLDER'], 'images')
+    thumb_folder = os.path.join(full_folder, 'thumbs')
+    os.makedirs(full_folder, exist_ok=True)
+    os.makedirs(thumb_folder, exist_ok=True)
+
+    # Delete old images
+    if os.path.isfile(file := os.path.join(full_folder, old_path)):
+        os.remove(file)
+    if os.path.isfile(file := os.path.join(thumb_folder, old_path)):
+        os.remove(file)
+
+    # Save image to local folder
+    full_path = os.path.join(full_folder, filename)
+    data.save(full_path)
+
+    # Resize uploaded image and make thumbnail
+    with Image.open(full_path) as img:
+        if img.mode != 'RGBA':
+            img = img.convert('RGBA')
+        img.thumbnail((800, 800), Image.Resampling.LANCZOS)
+        img.save(full_path, 'PNG', quality=80, optimize=True)
+        img.thumbnail((200, 200), Image.Resampling.LANCZOS)
+        img.save(os.path.join(thumb_folder, filename), 'PNG', quality=80, optimize=True)
+
+    return filename
+
+
 @login_required
 @app.route("/dash/promotions/<string:name>", methods=["GET", "POST"])
 def promotion(name):
-    promotion = Promotion.query.filter_by(name=name).first()
+    promo = Promotion.query.filter_by(name=name).first()
     if not promotion:
         return redirect(url_for('promotions'))
-    form = PromotionForm(obj=promotion)
+    form = PromotionForm(obj=promo)
 
     if request.method == "POST":
         if form.validate_on_submit():
             target_obj = Promotion.query.filter_by(name=form.name.data).first()
+
             if form.submit_save.data:
-                print("submit_save:", target_obj)
-                if not target_obj or promotion.id == target_obj.id:
+                if not target_obj or promo.id == target_obj.id:
                     if form.end.data < datetime.date(datetime.now()):
                         flash(f'Промоакция {form.name.data} завершена!', 'error')
-                    form.populate_obj(promotion)
-                    filename = secure_filename(form.image.data.filename)
-                    unique_filename = target_obj.image_path
-                    if filename:
-                        unique_filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{filename}"
-                        filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
-                        # form.image.data.save(filepath)
-                        form.image.data.filename = unique_filename
-                    promotion.image_path = unique_filename
+                    if form.image.data:
+                        # Set image name in object
+                        form.image_path.data = replace_image(form.image.data, target_obj.image_path)
+
+                    form.populate_obj(promo)
                     db.session.commit()
-                    flash(f'Промоакция [{promotion.name}] сохранена! 😊')
+                    flash(f'Промоакция [{promo.name}] сохранена! 😊')
                     return redirect(url_for('promotions'))
                 else:
                     print("error_save:", target_obj)
@@ -189,5 +223,5 @@ def promotion(name):
             if form.submit_cancel.data:
                 return redirect(url_for('promotions'))
     return render_template('promotion.html',
-                               title=f"Промоакция {name}",
-                               form=form)
+                           title=f"Промоакция {name}",
+                           form=form)

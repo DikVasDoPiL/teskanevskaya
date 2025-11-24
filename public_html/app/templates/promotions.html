@@ -14,6 +14,7 @@
 
     <div class="table">
         <header class="table-header promotions-header">
+            <div class="promo-img">Изображение</div>
             <div class="promo-name">Категория</div>
             <div class="promo-description">Описание</div>
             <div class="promo-start">Начало</div>
@@ -21,6 +22,14 @@
         </header>
     {% for promo in promotions %}
         <a class="table-row promotions-row" href="{{ url_for('promotion', name=promo.name) }}">
+            <div class="promo-img">
+                {% if promo.image_path %}
+                <img class="thumb-img"
+                     src="{{ url_for('static', filename='uploads/images/thumbs/' + promo.image_path) }}"
+                     alt="{{promo.image_path}}"
+                     srcset="{{ url_for('static', filename='uploads/images/thumbs/' + promo.image_path) }}">
+                {% endif %}
+            </div>
             <div class="promo-name">{{ promo.name }}</div>
             <div class="promo-description">{{ promo.description if promo.description else '---' }}</div>
             <div class="promo-start">{{ promo.start.strftime('%Y-%m-%d') if promo.start else "❌" }}</div>

@@ -8,12 +8,9 @@
 
 <h2>{{title}}</h2>
 
-      <form id="form-promotion" class="form-input" action="" method="post" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            <div class="form-field">
-                {{ form.image_path.label }}
-                {{ form.image_path(class="form-control") }}
-            </div>
+    <form id="form-promotion" class="form-input" action="" method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="form-fields-block">
             <div class="form-field">
                 <div class="form-field--label">
                     {{ form.name.label(class="field-label") }}
@@ -44,10 +41,25 @@
             </div>
 
             <div class="form-submits">
-              {{ form.submit_save(class="form-submit submit-green") }}
-              {{ form.submit_cancel(class="form-submit submit-red") }}
+                {{ form.submit_save(class="form-submit submit-green") }}
+                {{ form.submit_cancel(class="form-submit submit-red") }}
             </div>
-      </form>
+        </div>
+        <div class="form-image-block">
+            {% if form.image_path.data %}
+            <img src="{{ url_for('static', filename='uploads/images/' + form.image_path.data) }}"
+                 alt="{{form.image_path.data}}"
+                 srcset="{{ url_for('static', filename='uploads/images/' + form.image_path.data) }}">
+            {% endif %}
+            <div class="form-field">
+                {{ form.image_path.label }}
+                {{ form.image(class="form-control") }}
+            </div>
+        </div>
+    </form>
+
+
+
 {% endblock %}
 
 

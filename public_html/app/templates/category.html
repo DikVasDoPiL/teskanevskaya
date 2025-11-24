@@ -9,7 +9,8 @@
 <h2>{{title}}</h2>
       <form id="form-category" class="form-input" action="" method="post">
             {{ form.hidden_tag() }}
-            <div class="form-field">
+            <div class="form-fields-block">
+                <div class="form-field">
                 <div class="form-field--label">
                     {{ form.name.label(class="field-label") }}
                     <span style="color: red;">*</span>
@@ -17,23 +18,24 @@
                 <div class="form-field--input">{{ form.name(class="field-input") }}</div>
             </div>
 
-            <div class="form-field">
-                <div class="form-field--label">{{ form.description.label(class="field-label") }}</div>
-                <div class="form-field--input">{{ form.description(class="field-input", rows=5) }}</div>
-            </div>
-
-            <div class="form-field">
-                <div class="form-field--label">
-                    {{ form.active.label(class="field-label") }}
+                <div class="form-field">
+                    <div class="form-field--label">{{ form.description.label(class="field-label") }}</div>
+                    <div class="form-field--input">{{ form.description(class="field-input", rows=5) }}</div>
                 </div>
-                <div class="form-field--input">{{ form.active(class="chekcbox-input") }}</div>
-            </div>
 
-            <div class="form-submits">
-              {{ form.submit_save(class="form-submit submit-green") }}
-              {{ form.submit_cancel(class="form-submit submit-red") }}
-            </div>
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.active.label(class="field-label") }}
+                    </div>
+                    <div class="form-field--input">{{ form.active(class="chekcbox-input") }}</div>
+                </div>
 
+                <div class="form-submits">
+                  {{ form.submit_save(class="form-submit submit-green") }}
+                  {{ form.submit_cancel(class="form-submit submit-red") }}
+                </div>
+
+            </div>
       </form>
 {% endblock %}
 

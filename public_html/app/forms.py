@@ -61,7 +61,10 @@ class PromotionForm(FlaskForm):
         DataRequired(message='Дата окончания обязательно'),
         Optional()
     ])
-    image_path = FileField('Изображение', validators=[
+    image_path = StringField('Изображение', validators=[
+        Length(max=200, message='Слишком длинное имя файла, Максимум 200 символов')
+    ])
+    image = FileField('Изображение', validators=[
         FileAllowed(['jpg', 'png', 'jpeg', 'svg'], "Только изображения jpg, png, jpeg, svg!")
     ])
 
@@ -69,4 +72,3 @@ class PromotionForm(FlaskForm):
     submit_save = SubmitField('Сохранить')
     submit_cancel = SubmitField('Отмена')
     submit_end = SubmitField('Завершить')
-

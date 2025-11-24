@@ -221,7 +221,15 @@ article {
 
 .promotions-header,
 .promotions-row {
-    grid-template-columns: 2fr 3fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr 3fr 1fr 1fr;
+}
+
+.thumb-img {
+    display: block;
+    width: 80px;
+    height: auto;
+    margin: 0.25rem;
+    border-radius: 0.25rem;
 }
 
 .table-header {
@@ -283,11 +291,19 @@ article {
 }
 
 .form-input {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.form-fields-block,
+.form-image-block {
     min-width: 360px;
     max-width: 30rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    flex-grow: 1;
 }
 
 .form-field,
