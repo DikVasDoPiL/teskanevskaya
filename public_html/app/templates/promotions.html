@@ -32,8 +32,18 @@
             </div>
             <div class="promo-name">{{ promo.name }}</div>
             <div class="promo-description">{{ promo.description if promo.description else '---' }}</div>
-            <div class="promo-start">{{ promo.start.strftime('%Y-%m-%d') if promo.start else "❌" }}</div>
-            <div class="promo-end">{{ promo.end.strftime('%Y-%m-%d') if promo.end else "❌" }}</div>
+            <div class="promo-start">
+                {{ promo.start.strftime('%Y-%m-%d') if promo.start else "❌" }}
+                {% if promo.start > today %}
+                    <br>Не началось
+                {% endif %}
+            </div>
+            <div class="promo-end">
+                {{ promo.end.strftime('%Y-%m-%d') if promo.end else "❌" }}
+                {% if promo.end < today %}
+                    <br>Завершено
+                {% endif %}
+            </div>
         </a>
     {% endfor %}
     </div>

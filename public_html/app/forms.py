@@ -2,7 +2,8 @@
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, DateField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, DateField, IntegerField, \
+    SelectField
 from wtforms.validators import DataRequired, Optional, Length, NumberRange
 from wtforms.widgets import DateInput
 
@@ -65,10 +66,51 @@ class PromotionForm(FlaskForm):
         Length(max=200, message='Слишком длинное имя файла, Максимум 200 символов')
     ])
     image = FileField('Изображение', validators=[
-        FileAllowed(['jpg', 'png', 'jpeg', 'svg'], "Только изображения jpg, png, jpeg, svg!")
+        FileAllowed(['jpg', 'png', 'jpeg'], "Только изображения jpg, png, jpeg!")
     ])
 
     submit_new = SubmitField('Создать')
     submit_save = SubmitField('Сохранить')
     submit_cancel = SubmitField('Отмена')
     submit_end = SubmitField('Завершить')
+
+
+class ProductForm(FlaskForm):
+    name = StringField('Название', validators=[
+        DataRequired(message='Название обязательно'),
+        Length(max=64, message='Максимум 64 символа')
+    ])
+    description = TextAreaField('Описание', validators=[
+        Optional(),
+        Length(max=1000, message='Максимум 1000 символов')
+    ])
+    image_path = StringField('Изображение', validators=[
+        Optional(),
+        Length(max=200, message='Максимум 200 символов')
+    ])
+    power = IntegerField('Мощность (кВт)', validators=[
+        Optional(),
+        NumberRange(min=0, message='Мощность не может быть отрицательной')
+    ])
+    btu = IntegerField('BTU (холодопроизводительность)', validators=[
+        Optional(),
+        NumberRange(min=0, message='BTU не может быть отрицательной')
+    ])
+    cop = IntegerField('COP (коэффициент эффективности)', validators=[
+        Optional(),
+        NumberRange(min=0, message='COP не может быть отрицательной')
+    ])
+    type = StringField('Тип', validators=[
+        DataRequired(message='Тип обязателен'),
+        Length(max=64, message='Максимум 64 символа')
+    ])
+    category_id = SelectField('Категория', validators=[DataRequired()],
+                              coerce=int)  # В view: form.category_id.choices = [(c.id, c.name) for c in Category.query.all()]
+    promo_id = SelectField('Промо (опционально)', validators=[Optional()],
+                           choices=[(0, 'Нет')],
+                           coerce=int)  # В view: добавь [(p.id, p.name) for p in Promotion.query.all()] + [(0, 'Нет')]
+
+    submit_new = SubmitField('Создать')
+    submit_save = SubmitField('Сохранить')
+    submit_cancel = SubmitField('Отмена')
+    submit_delete = SubmitField('Удалить')

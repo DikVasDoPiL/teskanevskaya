@@ -60,3 +60,19 @@ class Promotion(db.Model):
         return f'<Promotion {self.name} from {self.start} to {self.end}>'
 
 
+class Product(db.Model):
+    __tablename__ = 'products'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), nullable=False, unique=True)
+    description = db.Column(db.Text, nullable=True)
+    image_path = db.Column(db.String(255), nullable=True)
+    power = db.Column(db.Integer)  # потребляемая электрическая мощность, кВт
+    btu = db.Column(db.Integer)  # холодопроизводительность, BTU
+    cop = db.Column(db.Integer)  # коэффициент преобразования - теплоэффективность, безразмерное
+    type = db.Column(db.String(64), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
+    promo_id = db.Column(db.Integer, db.ForeignKey('promotions.id'), nullable=True)
+
+    def __repr__(self):
+        return f'<Product {self.name}>'

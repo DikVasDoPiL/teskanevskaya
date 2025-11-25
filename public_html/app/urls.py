@@ -130,7 +130,7 @@ def category(name):
 @login_required
 @app.route("/dash/promotions", methods=["GET", "POST"])
 def promotions():
-    promotions_all = Promotion.query.order_by(Promotion.name).all()
+    promotions_all = Promotion.query.order_by(Promotion.end.desc()).all()
 
     form = PromotionForm()
     if request.method == "POST":
@@ -153,11 +153,12 @@ def promotions():
     return render_template('promotions.html',
                            title="Категории",
                            promotions=promotions_all,
-                           form=form)
+                           form=form,
+                           today=datetime.now())
 
 
-def replace_image(data, old_path):
-    filename = "_".join([
+def replace_image(data, old_path: str) -> str:
+    filename = ".".join([
         str(datetime.timestamp(datetime.now())),
         secure_filename(data.filename)
     ])
@@ -174,18 +175,23 @@ def replace_image(data, old_path):
     if os.path.isfile(file := os.path.join(thumb_folder, old_path)):
         os.remove(file)
 
-    # Save image to local folder
-    full_path = os.path.join(full_folder, filename)
-    data.save(full_path)
+    def calculate_size(img: Image, a: int) -> tuple:
+        width, height = img.size
+        kt = max(width / a, height / a)
+
+        return int(width / kt), int(height / kt)
 
     # Resize uploaded image and make thumbnail
-    with Image.open(full_path) as img:
+    with Image.open(data) as img:
         if img.mode != 'RGBA':
             img = img.convert('RGBA')
-        img.thumbnail((800, 800), Image.Resampling.LANCZOS)
-        img.save(full_path, 'PNG', quality=80, optimize=True)
-        img.thumbnail((200, 200), Image.Resampling.LANCZOS)
-        img.save(os.path.join(thumb_folder, filename), 'PNG', quality=80, optimize=True)
+
+        img = img.convert('P', palette=Image.Palette.ADAPTIVE, colors=256)
+
+        full = img.resize(calculate_size(img, 600), Image.Resampling.LANCZOS)
+        full.save(os.path.join(full_folder, filename), 'PNG', compress_level=5)
+        thumb = img.resize(calculate_size(img, 200), Image.Resampling.LANCZOS)
+        thumb.save(os.path.join(thumb_folder, filename), 'PNG', compress_level=5)
 
     return filename
 
