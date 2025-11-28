@@ -1,0 +1,119 @@
+{% extends "./admin/private.html" %}
+
+{% block title %}
+    Продукция:
+{% endblock %}
+
+{% block article %}
+    <div class="cat-menu">
+<!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', active_only='true', show_children=show_children|string) }}">Только активные</a>-->
+<!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', active_only='false', show_children=show_children|string) }}">Все</a>-->
+<!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', show_children='true', active_only=active_only|string) }}">С подкатегориями</a>-->
+        <button class="cat-btn grey-btn" type="button" onclick="overlayMenu.showModal()">Добавить</button>
+    </div>
+
+    <div class="table">
+        <header class="table-header products-header">
+            <div class="product-img">Изображение</div>
+            <div class="product-name">Наименование</div>
+            <div class="product-description">Описание</div>
+            <div class="product-category">Категория</div>
+            <div class="product-price">Цена</div>
+            <div class="cat-status">Наличие</div>
+        </header>
+    {% for product in products %}
+        <a class="table-row products-row" href="{{ url_for('product', name=product.name) }}">
+            <div class="product-img">
+                {% if product.image_path %}
+                <img class="thumb-img"
+                     src="{{ url_for('static', filename='uploads/images/thumbs/' + product.image_path) }}"
+                     alt="{{product.image_path}}"
+                     srcset="{{ url_for('static', filename='uploads/images/thumbs/' + product.image_path) }}">
+                {% endif %}
+            </div>
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-description">{{ product.description[:64] if product.description else '---' }}</div>
+            <div class="product-category">{{ product.category }}</div>
+            <div class="product-price">{{ product.price }}</div>
+            <div class="cat-status">{{ "✅" if product.visible else "❌" }}</div>
+        </a>
+    {% endfor %}
+    </div>
+
+
+
+{% endblock %}
+
+    {% block modal %}
+
+          <h3>Добавление продукта</h3>
+          <form id="form-product" class="form-login" action="" method="post" enctype="multipart/form-data" novalidate>
+                {{ form.hidden_tag() }}
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.name.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.name(class="field-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.image_path.label }}
+                    </div>
+                    <div class="form-field--input">
+                        {{ form.image(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">{{ form.description.label(class="field-label") }}</div>
+                    <div class="form-field--input">{{ form.description(class="field-input", rows=3) }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">{{ form.power.label(class="field-label") }}</div>
+                    <div class="form-field--input">{{ form.power(class="field-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">{{ form.btu.label(class="field-label") }}</div>
+                    <div class="form-field--input">{{ form.btu(class="field-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">{{ form.cop.label(class="field-label") }}</div>
+                    <div class="form-field--input">{{ form.cop(class="field-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.type.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.type(class="field-input", placeholder="Сплит-система") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.category_id.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.category_id(class="field-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.promo_id.label(class="field-label") }}
+                    </div>
+                    <div class="form-field--input">{{ form.promo_id(class="field-input") }}</div>
+                </div>
+
+                <div class="form-submits">{{ form.submit_new(class="form-submit submit-green") }}</div>
+
+          </form>
+
+    {% endblock %}
+
+

@@ -9,18 +9,21 @@ from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 
 from . import app, db
-from .forms import LoginForm, CategoryForm, PromotionForm
-from .models import User, Category, Promotion
+from .forms import LoginForm, CategoryForm, PromotionForm, ProductForm
+from .models import User, Category, Promotion, Product
 
 
 @app.route('/', methods=['get'])
 def index():
-    return render_template('home.html', name='teskanevskaya')
+    products_all = Product.query.filter_by(visible=True)
+    return render_template('./public/home.html',
+                           name='teskanevskaya',
+                           products=products_all)
 
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('./public/404.html'), 404
 
 
 @app.route('/login', methods=['GET'])
@@ -28,7 +31,7 @@ def login_get():
     if current_user.is_authenticated:
         return redirect('/dash')
     form = LoginForm()
-    return render_template('login.html', name='login', form=form, title="Авторизация")
+    return render_template('./admin/login.html', name='login', form=form, title="Авторизация")
 
 
 @app.route('/login', methods=['POST'])
@@ -45,9 +48,9 @@ def login_post():
                 flash('Ошибка авторизации - проверьте вводимые имя пользователя и пароль')
                 return render_template('login.html', title='Авторизация', form=form)
             login_user(user, remember=True)
-            return redirect('/dash')
+            return redirect('/dash/products')
         else:
-            return render_template('login.html', title='Авторизация', form=form)
+            return render_template('./admin/login.html', title='Авторизация', form=form)
 
 
 @app.route("/logout")
@@ -60,17 +63,15 @@ def logout():
 
 @app.route("/dash", methods=["GET"])
 def dashboard():
-    return render_template('dashboard.html', title="Панель управления")
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'), 301)
+    return render_template('./admin/dashboard.html', title="Панель управления")
 
 
-# @app.route('/sitemap.xml')
-# def serve_robots_sitemap():
-#     return send_from_directory(app.root_path, 'sitemap.xml')
-
-
-@login_required
 @app.route("/dash/categories", methods=["GET", "POST"])
 def categories():
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'), 301)
     categories_all = Category.query.order_by(Category.name).all()
     form = CategoryForm()
 
@@ -90,15 +91,16 @@ def categories():
         else:
             flash('Ошибка создания записи, заполните корректно поля формы', 'error')
 
-    return render_template('categories.html',
+    return render_template('./admin/categories.html',
                            title="Категории",
                            categories=categories_all,
                            form=form)
 
 
-@login_required
 @app.route('/dash/categories/<string:name>', methods=["GET", "POST"])
 def category(name):
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'), 301)
     cat = Category.query.filter_by(name=name).first()
     if not cat:
         return redirect(url_for('categories'))
@@ -122,14 +124,15 @@ def category(name):
                                     form=form)
             if form.submit_cancel.data:
                 return redirect(url_for('categories'))
-    return render_template('category.html',
+    return render_template('./admin/category.html',
                            title=f"Категория {name}",
                            form=form)
 
 
-@login_required
 @app.route("/dash/promotions", methods=["GET", "POST"])
 def promotions():
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'), 301)
     promotions_all = Promotion.query.order_by(Promotion.end.desc()).all()
 
     form = PromotionForm()
@@ -150,17 +153,29 @@ def promotions():
         else:
             flash('Ошибка создания записи, заполните корректно поля формы', 'error')
 
-    return render_template('promotions.html',
+    return render_template('./admin/promotions.html',
                            title="Категории",
                            promotions=promotions_all,
                            form=form,
                            today=datetime.now())
 
 
-def replace_image(data, old_path: str) -> str:
+def delete_images(img_path: str | None):
+    full_folder = os.path.join(app.config['UPLOAD_FOLDER'], 'images')
+    thumb_folder = os.path.join(full_folder, 'thumbs')
+
+    if img_path:
+        if os.path.isfile(file := os.path.join(full_folder, img_path)):
+            os.remove(file)
+        if os.path.isfile(file := os.path.join(thumb_folder, img_path)):
+            os.remove(file)
+
+
+def replace_image(data, img_path: str | None, prefix: str = 'img') -> str:
     filename = ".".join([
+        prefix,
         str(datetime.timestamp(datetime.now())),
-        secure_filename(data.filename)
+        'png'
     ])
 
     # Folder configs
@@ -170,10 +185,7 @@ def replace_image(data, old_path: str) -> str:
     os.makedirs(thumb_folder, exist_ok=True)
 
     # Delete old images
-    if os.path.isfile(file := os.path.join(full_folder, old_path)):
-        os.remove(file)
-    if os.path.isfile(file := os.path.join(thumb_folder, old_path)):
-        os.remove(file)
+    delete_images(img_path)
 
     def calculate_size(img: Image, a: int) -> tuple:
         width, height = img.size
@@ -186,19 +198,20 @@ def replace_image(data, old_path: str) -> str:
         if img.mode != 'RGBA':
             img = img.convert('RGBA')
 
-        img = img.convert('P', palette=Image.Palette.ADAPTIVE, colors=256)
+        # img = img.convert('P', palette=Image.Palette.ADAPTIVE, colors=256)
 
-        full = img.resize(calculate_size(img, 600), Image.Resampling.LANCZOS)
-        full.save(os.path.join(full_folder, filename), 'PNG', compress_level=5)
-        thumb = img.resize(calculate_size(img, 200), Image.Resampling.LANCZOS)
-        thumb.save(os.path.join(thumb_folder, filename), 'PNG', compress_level=5)
+        full = img.resize(calculate_size(img, 800), Image.Resampling.LANCZOS)
+        full.save(os.path.join(full_folder, filename), 'PNG', compress_level=5, quality=90)
+        thumb = img.resize(calculate_size(img, 400), Image.Resampling.LANCZOS)
+        thumb.save(os.path.join(thumb_folder, filename), 'PNG', compress_level=5, quality=90)
 
     return filename
 
 
-@login_required
 @app.route("/dash/promotions/<string:name>", methods=["GET", "POST"])
 def promotion(name):
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'), 301)
     promo = Promotion.query.filter_by(name=name).first()
     if not promotion:
         return redirect(url_for('promotions'))
@@ -214,7 +227,7 @@ def promotion(name):
                         flash(f'Промоакция {form.name.data} завершена!', 'error')
                     if form.image.data:
                         # Set image name in object
-                        form.image_path.data = replace_image(form.image.data, target_obj.image_path)
+                        form.image_path.data = replace_image(form.image.data, target_obj.image_path, 'promo')
 
                     form.populate_obj(promo)
                     db.session.commit()
@@ -228,6 +241,108 @@ def promotion(name):
                                     form=form)
             if form.submit_cancel.data:
                 return redirect(url_for('promotions'))
-    return render_template('promotion.html',
+    return render_template('./admin/promotion.html',
                            title=f"Промоакция {name}",
+                           form=form)
+
+
+def create_object(form, target):
+    pass
+
+
+@app.route("/dash/products", methods=["GET", "POST"])
+def products():
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'), 301)
+    produtcs_all = Product.query.order_by(Product.name).all()
+
+    for product in produtcs_all:
+        if current_cat := Category.query.filter_by(id=product.category_id).first():
+            product.category = current_cat.name
+        else:
+            product.category = '---'
+
+        if current_promo := Promotion.query.filter_by(id=product.promo_id).first():
+            product.promo = current_promo.name
+        else:
+            product.promo = '---'
+
+    form = ProductForm()
+    form.category_id.choices = [(c.id, c.name) for c in Category.query.all()]
+    form.promo_id.choices = [(0, 'Нет')] + [(p.id, p.name) for p in Promotion.query.all()]
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            if form.submit_new.data:
+                if Product.query.filter_by(name=form.name.data).first():
+                    flash('Такой продукт уже существует! Выберите другое имя.', 'error')
+                else:
+                    product = Product()
+                    if form.image.data:
+                        form.image_path.data = replace_image(
+                            data=form.image.data,
+                            img_path=form.image_path.data,
+                            prefix='product')
+
+                    form.populate_obj(product)
+                    db.session.add(product)
+                    db.session.commit()
+                    flash(f'Продукт {product.name} добавлен успешно! 🚀')
+                    produtcs_all.append(product)
+        else:
+            flash('Ошибка создания записи, заполните корректно поля формы', 'error')
+
+    return render_template('./admin/products.html',
+                           title="Товары и услуги",
+                           products=produtcs_all,
+                           form=form)
+
+
+@app.route("/dash/products/<string:name>", methods=["GET", "POST"])
+def product(name):
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'), 301)
+    product = Product.query.filter_by(name=name).first()
+    if not product:
+        return redirect(url_for('products'))
+    form = ProductForm(obj=product)
+    form.category_id.choices = [(c.id, c.name) for c in Category.query.all()]
+    form.promo_id.choices = [(0, 'Нет')] + [(p.id, p.name) for p in Promotion.query.all()]
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            target_obj = Product.query.filter_by(name=form.name.data).first()
+            print(target_obj)
+            if form.submit_save.data:
+                if not target_obj or product.id == target_obj.id:
+                    if form.image.data:
+                        # Set image name in object
+                        form.image_path.data = replace_image(
+                            data=form.image.data,
+                            img_path=target_obj.image_path,
+                            prefix='product')
+
+                    form.populate_obj(product)
+                    db.session.commit()
+                    flash(f'Продукт [{product.name}] сохранена! 😊')
+                    return redirect(url_for('products'))
+                else:
+                    print("error_save:", target_obj)
+                    flash(f'Продукт {target_obj.name} уже существует! Выберите другое имя.', 'error')
+                    render_template('./admin/product.html',
+                                    title="Редактирование продукта",
+                                    form=form)
+            if form.submit_cancel.data:
+                return redirect(url_for('products'))
+
+            if form.submit_delete.data:
+                delete_images(product.image_path)
+                db.session.delete(product)
+                db.session.commit()
+
+                flash(f'Продукт [{product.name}] удален')
+                return redirect(url_for('products'))
+
+    return render_template('./admin/product.html',
+                           title=f"Продукт {name}",
                            form=form)

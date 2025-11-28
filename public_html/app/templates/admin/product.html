@@ -1,0 +1,102 @@
+{% extends "./admin/private.html" %}
+
+{% block title %}
+    Редактор:
+{% endblock %}
+
+{% block article %}
+
+<h2>{{title}}</h2>
+
+    <form id="form-product" class="form-input" action="" method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="form-fields-block">
+           <div class="form-field">
+                <div class="form-field--label">
+                    {{ form.name.label(class="field-label") }}
+                    <span style="color: red;">*</span>
+                </div>
+                <div class="form-field--input">{{ form.name(class="field-input") }}</div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field--label">{{ form.price.label(class="field-label") }}</div>
+                <div class="form-field--input">{{ form.price(class="field-input") }}</div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field--label">
+                    {{ form.visible.label(class="field-label") }}
+                </div>
+                <div class="form-field--input">{{ form.visible(class="checkbox-input") }}</div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field--label">{{ form.description.label(class="field-label") }}</div>
+                <div class="form-field--input">{{ form.description(class="field-input", rows=5) }}</div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field--label">{{ form.power.label(class="field-label") }}</div>
+                <div class="form-field--input">{{ form.power(class="field-input") }}</div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field--label">{{ form.btu.label(class="field-label") }}</div>
+                <div class="form-field--input">{{ form.btu(class="field-input") }}</div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field--label">{{ form.cop.label(class="field-label") }}</div>
+                <div class="form-field--input">{{ form.cop(class="field-input") }}</div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field--label">
+                    {{ form.type.label(class="field-label") }}
+                    <span style="color: red;">*</span>
+                </div>
+                <div class="form-field--input">{{ form.type(class="field-input", placeholder="Сплит-система") }}</div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field--label">
+                    {{ form.category_id.label(class="field-label") }}
+                    <span style="color: red;">*</span>
+                </div>
+                <div class="form-field--input">{{ form.category_id(class="field-input") }}</div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field--label">
+                    {{ form.promo_id.label(class="field-label") }}
+                </div>
+                <div class="form-field--input">{{ form.promo_id(class="field-input") }}</div>
+            </div>
+
+            <div class="form-submits">
+                {{ form.submit_save(class="form-submit submit-green") }}
+                {{ form.submit_cancel(class="form-submit submit-neutral") }}
+                {{ form.submit_delete(class="form-submit submit-red") }}
+            </div>
+        </div>
+        <div class="form-image-block">
+            {% if form.image_path.data %}
+            <img src="{{ url_for('static', filename='uploads/images/' + form.image_path.data) }}"
+                 alt="{{form.image_path.data}}"
+                 srcset="{{ url_for('static', filename='uploads/images/' + form.image_path.data) }}">
+            {% endif %}
+            <div class="form-field">
+                {{ form.image_path.label }}
+                {{ form.image(class="form-control") }}
+            </div>
+        </div>
+    </form>
+
+
+
+{% endblock %}
+
+
+
+

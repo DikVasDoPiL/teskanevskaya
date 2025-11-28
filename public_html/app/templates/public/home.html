@@ -1,4 +1,4 @@
-{% extends "contact.html" %}
+{% extends "./public/contact.html" %}
 
 {% block title %}
 Сплит-системы:
@@ -70,3 +70,43 @@
     </section>
 {% endblock %}
 
+{% block products %}
+    <section class="main-section">
+            <div class="container">
+                <div class="content"><h2>Всегда лучшие цены</h2></div>
+                <div class="content">
+                    <div class="home-products">
+
+                        {% for product in products %}
+                        <a class="home-product" href="./dash/products/{{ product.name }}">
+                            {% if product.promo_id %}
+                            <img class="home-product--promo"
+                                 src="{{ url_for('static', filename='img/pic/promo-mini.png') }}"
+                                 alt="АКЦИЯ"
+                                 srcset="{{ url_for('static', filename='img/pic/promo-mini.png') }}">
+                            {% endif %}
+                            <div class="home-product--image">
+                                {% if product.image_path %}
+                                <img class="home-product--thumb"
+                                     src="{{ url_for('static', filename='uploads/images/thumbs/' + product.image_path) }}"
+                                     alt="{{product.image_path}}"
+                                     srcset="{{ url_for('static', filename='uploads/images/thumbs/' + product.image_path) }}">
+                                {% endif %}
+                            </div>
+                            <div class="home-product--description">
+                                <div class="home-product--price">
+                                    <div class="home-product-price">
+                                        {{ "{:,.0f}".format(product.price).replace(',', ' ') if product.price else "-" }} ₽
+                                    </div>
+                                </div>
+
+                                <div class="home-product--name">{{ product.name }}</div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "./public/public.html" %}
+
+{% block preloader %}
+    <div id="preloader">
+        <img
+            src="{{ url_for('static', filename='img/pic/transparent.png') }}"
+            alt="air-conditioner"
+            class="preloader-img"
+        >
+        <p class="preloader-text">Технологии сервиса - Каневская</p>
+        <div class="loader"></div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <!-- Form section  -->
+    <section class="main-section">
+        <div class="container">
+            <h1>{{ title }}</h1>
+            <form class="form-input" action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <div class="form-fields-block">
+                    <div class="form-field">
+                <div class="form-field--label">
+                    {{ form.username.label(class="field-label") }}
+                    {% for error in form.username.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="form-field--input">{{ form.username(class="field-input", size=32) }}</div>
+                </div>
+                    <div class="form-field">
+                <div class="form-field--label">
+                    {{ form.password.label(class="field-label") }}
+                    {% for error in form.password.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="form-field--input">{{ form.password(class="field-input", size=32) }}</div>
+                </div>
+                <div class="form-submits">{{ form.submit(class="form-submit submit-green") }}</div>
+
+                </div>
+
+
+            </form>
+        </div>
+    </section>
+
+            <!-- Message section  -->
+            <section class="main-section">
+                <div class="container">
+                    {% with messages = get_flashed_messages() %}
+                      {% if messages %}
+                        <ul>
+                          {% for message in messages %}
+                            <li><span style="color: red;">[{{ message }}]</span></li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    {% endwith %}
+                </div>
+            </section>
+
+
+
+{% endblock %}

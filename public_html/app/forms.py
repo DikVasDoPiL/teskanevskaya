@@ -3,7 +3,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, DateField, IntegerField, \
-    SelectField
+    SelectField, FloatField, DecimalField
 from wtforms.validators import DataRequired, Optional, Length, NumberRange
 from wtforms.widgets import DateInput
 
@@ -69,6 +69,7 @@ class PromotionForm(FlaskForm):
         FileAllowed(['jpg', 'png', 'jpeg'], "Только изображения jpg, png, jpeg!")
     ])
 
+
     submit_new = SubmitField('Создать')
     submit_save = SubmitField('Сохранить')
     submit_cancel = SubmitField('Отмена')
@@ -88,7 +89,16 @@ class ProductForm(FlaskForm):
         Optional(),
         Length(max=200, message='Максимум 200 символов')
     ])
-    power = IntegerField('Мощность (кВт)', validators=[
+    price = DecimalField('Стоимость, руб', validators=[
+        Optional(),
+        NumberRange(min=0, message='Стоимость не может быть отрицательной')
+    ],
+        render_kw={'step': '0.01', 'class': 'form-control'}
+    )
+    image = FileField('Изображение', validators=[
+        FileAllowed(['jpg', 'png', 'jpeg'], "Только изображения jpg, png, jpeg!")
+    ])
+    power = FloatField('Мощность (кВт)', validators=[
         Optional(),
         NumberRange(min=0, message='Мощность не может быть отрицательной')
     ])
@@ -96,7 +106,7 @@ class ProductForm(FlaskForm):
         Optional(),
         NumberRange(min=0, message='BTU не может быть отрицательной')
     ])
-    cop = IntegerField('COP (коэффициент эффективности)', validators=[
+    cop = FloatField('COP (коэффициент эффективности)', validators=[
         Optional(),
         NumberRange(min=0, message='COP не может быть отрицательной')
     ])
@@ -104,8 +114,10 @@ class ProductForm(FlaskForm):
         DataRequired(message='Тип обязателен'),
         Length(max=64, message='Максимум 64 символа')
     ])
+    visible = BooleanField('В наличии', default=True)
+
     category_id = SelectField('Категория', validators=[DataRequired()],
-                              coerce=int)  # В view: form.category_id.choices = [(c.id, c.name) for c in Category.query.all()]
+                              coerce=int)  # В view: form.category.choices = [(c.id, c.name) for c in Category.query.all()]
     promo_id = SelectField('Промо (опционально)', validators=[Optional()],
                            choices=[(0, 'Нет')],
                            coerce=int)  # В view: добавь [(p.id, p.name) for p in Promotion.query.all()] + [(0, 'Нет')]

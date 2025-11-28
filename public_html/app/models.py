@@ -67,10 +67,12 @@ class Product(db.Model):
     name = db.Column(db.String(64), nullable=False, unique=True)
     description = db.Column(db.Text, nullable=True)
     image_path = db.Column(db.String(255), nullable=True)
-    power = db.Column(db.Integer)  # потребляемая электрическая мощность, кВт
-    btu = db.Column(db.Integer)  # холодопроизводительность, BTU
-    cop = db.Column(db.Integer)  # коэффициент преобразования - теплоэффективность, безразмерное
+    price = db.Column(db.Float, nullable=True)
+    power = db.Column(db.Float, nullable=True)  # потребляемая электрическая мощность, кВт
+    btu = db.Column(db.Integer, nullable=True)  # холодопроизводительность, BTU
+    cop = db.Column(db.Float, nullable=True)  # коэффициент преобразования - теплоэффективность, безразмерное
     type = db.Column(db.String(64), nullable=False)
+    visible = db.Column(db.Boolean, default=True)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
     promo_id = db.Column(db.Integer, db.ForeignKey('promotions.id'), nullable=True)
 
