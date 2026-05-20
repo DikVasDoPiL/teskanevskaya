@@ -27,6 +27,24 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+# Реализация пользовательских коллекций полей свойтсв для категорий 
+custom_field_category = db.Table('custom_field_category',
+    db.Column('custom_field_id', db.Integer, db.ForeignKey('customfields.id'), primary_key=True),
+    db.Column('category_id', db.Integer, db.ForeignKey('categories.id'), primary_key=True),
+    )
+
+
+class CustomFields(db.Model):
+    __tablename__ = 'customfields'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, nullable=True)
+    active = db.Column(db.Boolean, default=True)
+
+    def __repr__(self):
+        return f'<Fileds {self.id}: {self.name}>'
+
+
 class Category(db.Model):
     __tablename__ = 'categories'
 
@@ -34,16 +52,11 @@ class Category(db.Model):
     name = db.Column(db.String(64), nullable=False, unique=True)
     description = db.Column(db.Text, nullable=True)
     active = db.Column(db.Boolean, default=True)
-
-    # Внешний ключ на саму себя для родителя
-    # parent_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
-
-    # Связи: дети (один-ко-многим) и родитель (многие-к-одному)
-    # children = db.relationship('Category', backref=db.backref('parent', remote_side=[id]),
-    #                            lazy=True, cascade='all, delete-orphan')
+    fields = db.relationship('CustomFields', secondary=custom_field_category, backref=db.backref('category', lazy='dynamic'))
 
     def __repr__(self):
-        return f'<Category {self.name}>'
+        return f'<Category {self.id}: {self.name}>'
+    
 
 
 class Promotion(db.Model):
@@ -57,7 +70,7 @@ class Promotion(db.Model):
     image_path = db.Column(db.String(255), nullable=True)
 
     def __repr__(self):
-        return f'<Promotion {self.name} from {self.start} to {self.end}>'
+        return f'<Promotion {self.id}: {self.name} from {self.start} to {self.end}>'
 
 
 class Product(db.Model):
@@ -68,13 +81,12 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable=True)
     image_path = db.Column(db.String(255), nullable=True)
     price = db.Column(db.Float, nullable=True)
-    power = db.Column(db.Float, nullable=True)  # потребляемая электрическая мощность, кВт
-    btu = db.Column(db.Integer, nullable=True)  # холодопроизводительность, BTU
-    cop = db.Column(db.Float, nullable=True)  # коэффициент преобразования - теплоэффективность, безразмерное
-    type = db.Column(db.String(64), nullable=False)
     visible = db.Column(db.Boolean, default=True)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
     promo_id = db.Column(db.Integer, db.ForeignKey('promotions.id'), nullable=True)
+    custom_fields_data = db.Column(db.JSON, nullable=True)
 
     def __repr__(self):
-        return f'<Product {self.name}>'
+        return f'<Product {self.id}: {self.name}>'
+
+

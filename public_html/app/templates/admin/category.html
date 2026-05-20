@@ -11,12 +11,12 @@
             {{ form.hidden_tag() }}
             <div class="form-fields-block">
                 <div class="form-field">
-                <div class="form-field--label">
-                    {{ form.name.label(class="field-label") }}
-                    <span style="color: red;">*</span>
+                    <div class="form-field--label">
+                        {{ form.name.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.name(class="field-input") }}</div>
                 </div>
-                <div class="form-field--input">{{ form.name(class="field-input") }}</div>
-            </div>
 
                 <div class="form-field">
                     <div class="form-field--label">{{ form.description.label(class="field-label") }}</div>
@@ -30,6 +30,24 @@
                     <div class="form-field--input">{{ form.active(class="checkbox-input") }}</div>
                 </div>
 
+                <div class="form-field">
+                    {% if available_fields %}
+                    <div class="form-field--label">Связанные свойства</div>
+                    <div class="form-field--input">
+                        {% for field in available_fields %}
+                        <label class="form-field--input">
+                            <input class="form-field--input checkbox-input" 
+                                type="checkbox"
+                                name="custom_field"
+                                value="{{field.name}}"
+                                {% if field in selected_fields %} checked {% endif %}>
+                            {{ field.name }}
+                        </label>                      
+                    {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                    
                 <div class="form-submits">
                   {{ form.submit_save(class="form-submit submit-green") }}
                   {{ form.submit_cancel(class="form-submit submit-red") }}

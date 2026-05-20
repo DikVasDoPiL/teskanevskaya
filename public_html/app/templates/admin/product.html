@@ -37,29 +37,6 @@
             </div>
 
             <div class="form-field">
-                <div class="form-field--label">{{ form.power.label(class="field-label") }}</div>
-                <div class="form-field--input">{{ form.power(class="field-input") }}</div>
-            </div>
-
-            <div class="form-field">
-                <div class="form-field--label">{{ form.btu.label(class="field-label") }}</div>
-                <div class="form-field--input">{{ form.btu(class="field-input") }}</div>
-            </div>
-
-            <div class="form-field">
-                <div class="form-field--label">{{ form.cop.label(class="field-label") }}</div>
-                <div class="form-field--input">{{ form.cop(class="field-input") }}</div>
-            </div>
-
-            <div class="form-field">
-                <div class="form-field--label">
-                    {{ form.type.label(class="field-label") }}
-                    <span style="color: red;">*</span>
-                </div>
-                <div class="form-field--input">{{ form.type(class="field-input", placeholder="Сплит-система") }}</div>
-            </div>
-
-            <div class="form-field">
                 <div class="form-field--label">
                     {{ form.category_id.label(class="field-label") }}
                     <span style="color: red;">*</span>
@@ -73,6 +50,16 @@
                 </div>
                 <div class="form-field--input">{{ form.promo_id(class="field-input") }}</div>
             </div>
+
+            {% for field in form.custom_fields %}
+                <div class="form-field" >
+                    <label class="form-field--label">{{ field.name }}</label>
+                    <input class="form-field--input"
+                        type="text"
+                        name="{{ field.name }}"
+                        value="{{ saved_data.get(field.id | string) if saved_data.get(field.id | string) else '---' }}">
+                </div>
+            {% endfor %}
 
             <div class="form-submits">
                 {{ form.submit_save(class="form-submit submit-green") }}
@@ -91,6 +78,7 @@
                 {{ form.image(class="form-control") }}
             </div>
         </div>
+
     </form>
 
 

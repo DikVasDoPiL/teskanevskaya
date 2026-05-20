@@ -1,7 +1,7 @@
 {% extends "./admin/private.html" %}
 
 {% block title %}
-    Категории:
+    Дополнительные поля:
 {% endblock %}
 
 {% block article %}
@@ -10,20 +10,27 @@
 <!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', active_only='false', show_children=show_children|string) }}">Все</a>-->
 <!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', show_children='true', active_only=active_only|string) }}">С подкатегориями</a>-->
         <button class="cat-btn grey-btn" type="button" onclick="overlayMenu.showModal()">Добавить</button>
-        <a class="cat-btn grey-btn" href="{{ url_for('custom_fields') }}">Редактировать пользовательские свойства</a>
     </div>
 
     <div class="table">
         <header class="table-header categories-header">
-            <div class="cat-name">Категория</div>
-            <div class="cat-description">Описание</div>
+            <div class="cat-name">Свойство</div>
+            <div class="cat-description">Связанные категории</div>
             <div class="cat-status">Состояние</div>
         </header>
-    {% for cat in categories %}
-        <a class="table-row categories-row" href="{{ url_for('category', name=cat.name) }}">
-            <div class="cat-name">{{ cat.name }}</div>
-            <div class="cat-description">{{ cat.description if cat.description else '---' }}</div>
-            <div class="cat-status">{{ "✅" if cat.active else "❌" }}</div>
+    {% for field in all_fields %}
+        <a class="table-row categories-row" href="{{ url_for('custom_field', name=field.name) }}">
+            <div class="cat-name">{{ field.name }}</div>
+            <div class="cat-description">
+                {% if field.categories %}
+                    <ul>
+                        {% for field in field.categories %}
+                            <li>{{field}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="cat-status">{{ "✅" if field.active else "❌" }}</div>
         </a>
     {% endfor %}
     </div>
@@ -33,7 +40,7 @@
 
     {% block modal %}
 
-          <h3>Добавление категории</h3>
+          <h3>Добавление поля</h3>
           <form id="form-category" class="form-modal" action="" method="post">
                 {{ form.hidden_tag() }}
                 <div class="form-field">
@@ -42,11 +49,6 @@
                         <span style="color: red;">*</span>
                     </div>
                     <div class="form-field--input">{{ form.name(class="field-input") }}</div>
-                </div>
-
-                <div class="form-field">
-                    <div class="form-field--label">{{ form.description.label(class="field-label") }}</div>
-                    <div class="form-field--input">{{ form.description(class="field-input", rows=5) }}</div>
                 </div>
 
                 <div class="form-field--checkbox">

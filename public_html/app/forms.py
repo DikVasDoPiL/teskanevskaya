@@ -1,14 +1,33 @@
-
+import json
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, DateField, IntegerField, \
     SelectField, FloatField, DecimalField
-from wtforms.validators import DataRequired, Optional, Length, NumberRange
+from wtforms.validators import DataRequired, Optional, Length, NumberRange, ValidationError
 from wtforms.widgets import DateInput
 
 DATA_REQUIRED_MESSAGE = "Необходимо заполнить"
 
+class JsonField(TextAreaField):
+    """Кастомное поле WTForms для автоматической работы с JSON."""
+    
+    def _value(self):
+        # Превращает Python dict/list из базы данных в красивую строку для HTML
+        if self.data is not None:
+            return json.dumps(self.data, indent=4, ensure_ascii=False)
+        return ''
+
+    def process_formdata(self, valuelist):
+        # Принимает строку из HTML-формы и превращает её обратно в Python dict/list
+        if valuelist and valuelist[0].strip():
+            try:
+                self.data = json.loads(valuelist[0])
+            except ValueError:
+                self.data = None
+                raise ValidationError('Некорректный синтаксис JSON!')
+        else:
+            self.data = {} # Или None, если поле может быть пустым
 
 class LoginForm(FlaskForm):
     username = StringField('Пользователь', validators=[
@@ -19,8 +38,13 @@ class LoginForm(FlaskForm):
     ])
     submit = SubmitField('Войти')
 
+class FormButtons():
+    submit_new = SubmitField('Создать')
+    submit_save = SubmitField('Сохранить')
+    submit_cancel = SubmitField('Отмена')
+    
 
-class CategoryForm(FlaskForm):
+class CategoryForm(FlaskForm, FormButtons):
     id = IntegerField()
     name = StringField('Название', validators=[DataRequired(DATA_REQUIRED_MESSAGE), Length(min=3, max=64)])
     description = TextAreaField('Описание', validators=[
@@ -37,14 +61,11 @@ class CategoryForm(FlaskForm):
     #     allow_blank=True,  # Опционально: без родителя
     #     blank_text='- Нет родителя -'
     # )
-    submit_new = SubmitField('Создать')
-    submit_save = SubmitField('Сохранить')
-    submit_cancel = SubmitField('Отмена')
-    submit_end = SubmitField('Завершить')
 
 
-class PromotionForm(FlaskForm):
+class PromotionForm(FlaskForm, FormButtons):
     id = IntegerField()
+    submit_end = SubmitField('Завершить')
 
     name = StringField('Название', validators=[
         DataRequired(message='Название обязательно'),
@@ -70,13 +91,8 @@ class PromotionForm(FlaskForm):
     ])
 
 
-    submit_new = SubmitField('Создать')
-    submit_save = SubmitField('Сохранить')
-    submit_cancel = SubmitField('Отмена')
-    submit_end = SubmitField('Завершить')
-
-
-class ProductForm(FlaskForm):
+class ProductForm(FlaskForm, FormButtons):
+    submit_delete = SubmitField('Удалить')
     name = StringField('Название', validators=[
         DataRequired(message='Название обязательно'),
         Length(max=64, message='Максимум 64 символа')
@@ -98,23 +114,10 @@ class ProductForm(FlaskForm):
     image = FileField('Изображение', validators=[
         FileAllowed(['jpg', 'png', 'jpeg'], "Только изображения jpg, png, jpeg!")
     ])
-    power = FloatField('Мощность (кВт)', validators=[
-        Optional(),
-        NumberRange(min=0, message='Мощность не может быть отрицательной')
-    ])
-    btu = IntegerField('BTU (холодопроизводительность)', validators=[
-        Optional(),
-        NumberRange(min=0, message='BTU не может быть отрицательной')
-    ])
-    cop = FloatField('COP (коэффициент эффективности)', validators=[
-        Optional(),
-        NumberRange(min=0, message='COP не может быть отрицательной')
-    ])
-    type = StringField('Тип', validators=[
-        DataRequired(message='Тип обязателен'),
-        Length(max=64, message='Максимум 64 символа')
-    ])
+
     visible = BooleanField('В наличии', default=True)
+
+    custom_fields_data = JsonField('Описание', validators=[Optional()])
 
     category_id = SelectField('Категория', validators=[DataRequired()],
                               coerce=int)  # В view: form.category.choices = [(c.id, c.name) for c in Category.query.all()]
@@ -122,7 +125,9 @@ class ProductForm(FlaskForm):
                            choices=[(0, 'Нет')],
                            coerce=int)  # В view: добавь [(p.id, p.name) for p in Promotion.query.all()] + [(0, 'Нет')]
 
-    submit_new = SubmitField('Создать')
-    submit_save = SubmitField('Сохранить')
-    submit_cancel = SubmitField('Отмена')
-    submit_delete = SubmitField('Удалить')
+
+class CustomFieldsForm(FlaskForm, FormButtons):
+    id = IntegerField()
+    name = StringField('Название', validators=[DataRequired(DATA_REQUIRED_MESSAGE), Length(min=3, max=64)])
+    active = BooleanField('Активно', default=True)
+    
