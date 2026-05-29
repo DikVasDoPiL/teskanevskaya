@@ -1,0 +1,49 @@
+{% extends "footer.html" %}
+
+{% block private %}
+    <!-- Form section  -->
+    <section class="main-section">
+        <div class="dashboard container">
+            <aside>
+                <ul class="admin-menu">
+<!--                    <li><a class="admin-menu&#45;&#45;item" href="{{ url_for('dashboard') }}">Админка</a></li>-->
+                    <li><a class="admin-menu--item" href="{{ url_for('categories') }}">Категории</a></li>
+                    <li><a class="admin-menu--item" href="{{ url_for('products') }}">Товары</a></li>
+                    <li><a class="admin-menu--item" href="{{ url_for('promotions') }}">Акции</a></li>
+                    <li><a class="admin-menu--item" href="/logout">Выход</a></li>
+                </ul>
+
+            </aside>
+            <article>
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    {% for message in messages %}
+                        <p class="flash-message">{{ message }}</p>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+
+                {% block article %}
+                {% endblock %}
+            </article>
+
+        </div>
+    </section>
+
+       <dialog class="modal-window" id="overlayMenu">
+           <div class="modal-content">
+                <form id="modal-form" method="dialog">
+                    <div class="modal-control">
+                        <button class="cat-btn grey-btn" type="submit">Закрыть</button>
+                    </div>
+                </form>
+
+                {% block modal %}
+                {% endblock %}
+            </div>
+
+       </dialog>
+
+
+{% endblock %}
+

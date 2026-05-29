@@ -1,0 +1,65 @@
+{% extends "./admin/private.html" %}
+
+{% block title %}
+    Дополнительные поля:
+{% endblock %}
+
+{% block article %}
+    <div class="cat-menu">
+<!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', active_only='true', show_children=show_children|string) }}">Только активные</a>-->
+<!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', active_only='false', show_children=show_children|string) }}">Все</a>-->
+<!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', show_children='true', active_only=active_only|string) }}">С подкатегориями</a>-->
+        <button class="cat-btn grey-btn" type="button" onclick="overlayMenu.showModal()">Добавить</button>
+    </div>
+
+    <div class="table">
+        <header class="table-header categories-header">
+            <div class="cat-name">Свойство</div>
+            <div class="cat-description">Связанные категории</div>
+            <div class="cat-status">Состояние</div>
+        </header>
+    {% for field in all_fields %}
+        <a class="table-row categories-row" href="{{ url_for('custom_field', name=field.name) }}">
+            <div class="cat-name">{{ field.name }}</div>
+            <div class="cat-description">
+                {% if field.categories %}
+                    <ul>
+                        {% for field in field.categories %}
+                            <li>{{field}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="cat-status">{{ "✅" if field.active else "❌" }}</div>
+        </a>
+    {% endfor %}
+    </div>
+
+
+{% endblock %}
+
+    {% block modal %}
+
+          <h3>Добавление поля</h3>
+          <form id="form-category" class="form-modal" action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.name.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.name(class="field-input") }}</div>
+                </div>
+
+                <div class="form-field--checkbox">
+                    <div class="form-field--label">{{ form.active.label(class="field-label") }}</div>
+                    <div class="form-field--input">{{ form.active(class="checkbox-input") }}</div>
+                </div>
+
+                <div class="form-submits">{{ form.submit_new(class="form-submit submit-green") }}</div>
+
+          </form>
+
+    {% endblock %}
+
+

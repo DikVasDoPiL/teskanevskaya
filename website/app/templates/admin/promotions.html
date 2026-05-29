@@ -1,0 +1,96 @@
+{% extends "./admin/private.html" %}
+
+{% block title %}
+    Промоакции:
+{% endblock %}
+
+{% block article %}
+    <div class="cat-menu">
+<!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', active_only='true', show_children=show_children|string) }}">Только активные</a>-->
+<!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', active_only='false', show_children=show_children|string) }}">Все</a>-->
+<!--        <a class="cat-btn grey-btn" href="{{ url_for('categories', show_children='true', active_only=active_only|string) }}">С подкатегориями</a>-->
+        <button class="cat-btn grey-btn" type="button" onclick="overlayMenu.showModal()">Добавить</button>
+    </div>
+
+    <div class="table">
+        <header class="table-header promotions-header">
+            <div class="promo-img">Изображение</div>
+            <div class="promo-name">Категория</div>
+            <div class="promo-description">Описание</div>
+            <div class="promo-start">Начало</div>
+            <div class="promo-end">Окончание</div>
+        </header>
+    {% for promo in promotions %}
+        <a class="table-row promotions-row" href="{{ url_for('promotion', name=promo.name) }}">
+            <div class="promo-img">
+                {% if promo.image_path %}
+                <img class="thumb-img"
+                     src="{{ url_for('static', filename='uploads/images/thumbs/' + promo.image_path) }}"
+                     alt="{{promo.image_path}}"
+                     srcset="{{ url_for('static', filename='uploads/images/thumbs/' + promo.image_path) }}">
+                {% endif %}
+            </div>
+            <div class="promo-name">{{ promo.name }}</div>
+            <div class="promo-description">{{ promo.description if promo.description else '---' }}</div>
+            <div class="promo-start">
+                {{ promo.start.strftime('%Y-%m-%d') if promo.start else "❌" }}
+                {% if promo.start > today %}
+                    <br>Не началось
+                {% endif %}
+            </div>
+            <div class="promo-end">
+                {{ promo.end.strftime('%Y-%m-%d') if promo.end else "❌" }}
+                {% if promo.end < today %}
+                    <br>Завершено
+                {% endif %}
+            </div>
+        </a>
+    {% endfor %}
+    </div>
+
+
+
+{% endblock %}
+
+    {% block modal %}
+
+          <h3>Добавление промоакции</h3>
+          <form id="form-category" class="form-login" action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.name.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.name(class="field-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">{{ form.description.label(class="field-label") }}</div>
+                    <div class="form-field--input">{{ form.description(class="field-input", rows=5) }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.start.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.start(class="date-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.end.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.end(class="date-input") }}</div>
+                </div>
+
+                <div class="form-submits">{{ form.submit_new(class="form-submit submit-green") }}</div>
+
+          </form>
+
+    {% endblock %}
+
+
