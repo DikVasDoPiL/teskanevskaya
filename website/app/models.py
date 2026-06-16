@@ -3,7 +3,7 @@ from datetime import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from .extentions import db, login
+from app.extentions import db
 
 
 class User(UserMixin, db.Model):
@@ -22,12 +22,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
 
-@login.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-
-# Реализация пользовательских коллекций полей свойтсв для категорий 
+# Реализация пользовательских коллекций полей свойтсв для категорий
 custom_field_category = db.Table('custom_field_category',
     db.Column('custom_field_id', db.Integer, db.ForeignKey('customfields.id'), primary_key=True),
     db.Column('category_id', db.Integer, db.ForeignKey('categories.id'), primary_key=True),
@@ -53,6 +48,7 @@ class Category(db.Model):
     description = db.Column(db.Text, nullable=True)
     active = db.Column(db.Boolean, default=True)
     fields = db.relationship('CustomFields', secondary=custom_field_category, backref=db.backref('category', lazy='dynamic'))
+    image_path = db.Column(db.String(255), nullable=True)
 
     def __repr__(self):
         return f'<Category {self.id}: {self.name}>'

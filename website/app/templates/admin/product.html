@@ -69,9 +69,9 @@
         </div>
         <div class="form-image-block">
             {% if form.image_path.data %}
-            <img src="{{ url_for('static', filename='uploads/images/' + form.image_path.data) }}"
+            <img src="{{ url_for('uploaded_file', filename='images/' + form.image_path.data) }}"
                  alt="{{form.image_path.data}}"
-                 srcset="{{ url_for('static', filename='uploads/images/' + form.image_path.data) }}">
+                 srcset="{{ url_for('uploaded_file', filename='images/' + form.image_path.data) }}">
             {% endif %}
             <div class="form-field">
                 {{ form.image_path.label }}

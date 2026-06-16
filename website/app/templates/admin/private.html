@@ -6,16 +6,17 @@
         <div class="dashboard container">
             <aside>
                 <ul class="admin-menu">
-<!--                    <li><a class="admin-menu&#45;&#45;item" href="{{ url_for('dashboard') }}">Админка</a></li>-->
-                    <li><a class="admin-menu--item" href="{{ url_for('categories') }}">Категории</a></li>
-                    <li><a class="admin-menu--item" href="{{ url_for('products') }}">Товары</a></li>
-                    <li><a class="admin-menu--item" href="{{ url_for('promotions') }}">Акции</a></li>
-                    <li><a class="admin-menu--item" href="/logout">Выход</a></li>
+                    <li><a class="admin-menu--item" href="{{ url_for('auth.logout') }}">Выход</a></li>
+                    <li><a class="admin-menu--item" href="{{ url_for('admin.categories') }}">Категории</a></li>
+                    <li><a class="admin-menu--item" href="{{ url_for('admin.custom_fields') }}">Аттрибуты</a></li>
+                    <li><a class="admin-menu--item" href="{{ url_for('admin.promotions') }}">Акции</a></li>
+                    <li><a class="admin-menu--item" href="{{ url_for('admin.products') }}">Товары</a></li>
                 </ul>
 
             </aside>
             <article>
                 {% with messages = get_flashed_messages() %}
+
                   {% if messages %}
                     {% for message in messages %}
                         <p class="flash-message">{{ message }}</p>
@@ -23,6 +24,9 @@
                   {% endif %}
                 {% endwith %}
 
+                <div class="cat-menu">
+
+                </div>
                 {% block article %}
                 {% endblock %}
             </article>
