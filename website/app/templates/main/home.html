@@ -93,7 +93,7 @@
 
                             {% for product in products['products'] %}
                                 <div class="home-product-card">
-                                    <a class="home-product" href="{{ url_for('main.product', name=product.name)}}">
+                                    <a class="home-product" href="{{ url_for('shop.order', category_name=cat, product_name=product.name)}}">
                                         {% if product.promo_id %}
                                         <img class="home-product--promo"
                                             src="{{ url_for('static', filename='img/pic/promo-mini.png') }}"

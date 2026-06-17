@@ -17,13 +17,3 @@ def index():
 def page_not_found(e):
     return render_template('./main/404.html'), 404
 
-
-@main_bp.route('/product/<name>')
-def product(name):
-    if the_product := get_product_by_name(name):
-        # another_products = get_products_by_category(the_product10)
-        
-        return render_template('main/product.html',
-                            name='teskanevskaya',
-                            product=the_product.__dict__)
-    return render_template('./main/404.html'), 404

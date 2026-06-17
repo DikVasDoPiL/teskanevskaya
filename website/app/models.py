@@ -3,6 +3,7 @@ from datetime import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 from app.extentions import db
 
 
@@ -86,3 +87,19 @@ class Product(db.Model):
         return f'<Product {self.id}: {self.name}>'
 
 
+class Order(db.Model):
+    __tablename__ = 'orders'
+
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    username = db.Column(db.String(64), nullable=False, unique=True)
+    phone = db.Column(db.String(20), nullable=False)
+    address = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    installation = db.Column(db.Boolean, default=False)
+    # cost = db.Column(db.Float, nullable=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+
+
+    def __repr__(self):
+        return f'<Order {self.username}: {self.cost}>'

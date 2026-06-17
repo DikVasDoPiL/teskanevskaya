@@ -744,6 +744,27 @@ dialog[open], dialog[open]::backdrop {
     gap: 1.5rem;
 }
 
+/* FORM ORDER */
+
+.form_order_container {
+    display: flex;
+
+}
+
+.order_detail,
+.product_detail {
+    width: 50%;
+    min-width: 320px;
+}
+
+.order_field,
+.product_field {
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+}
+
+
 /* CONTAINER REQUEST */
 
 @container body-size (width < 64rem) {

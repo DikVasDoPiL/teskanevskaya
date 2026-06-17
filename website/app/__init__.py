@@ -45,6 +45,9 @@ def create_app(config_class=Config):
     
     from app.blueprints.admin import admin_bp
     app.register_blueprint(admin_bp, url_prefix='/admin')
+
+    from app.blueprints.shop import shop_bp
+    app.register_blueprint(shop_bp, url_prefix='/shop')
     
     return app
 
