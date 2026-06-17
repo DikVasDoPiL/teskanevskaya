@@ -346,7 +346,7 @@ article {
 
 .field-input,
 .date-input {
-    width: 100%;
+    width: calc(100% - 0.5rem - 2px);
 }
 
 .field-input,
@@ -747,21 +747,52 @@ dialog[open], dialog[open]::backdrop {
 /* FORM ORDER */
 
 .form_order_container {
-    display: flex;
-
+    display: grid;
+    min-width: 20rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem; 
 }
 
 .order_detail,
 .product_detail {
-    width: 50%;
-    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.order_field_submits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
 }
 
 .order_field,
 .product_field {
+    min-width: 20rem;
+}
+
+.order_field {
     display: flex;
     flex-wrap: wrap;
-    width: 50%;
+}
+
+.order_field_label,
+.order_field_value {
+    width: 100%;
+}
+
+.product_field {
+    display: grid;
+    grid-template-columns: 3fr 5fr;
+    gap: 1rem;
+
+}
+
+.product-image {
+    max-width: 60%;
+    height: auto;
+    border-radius: 0.5rem;
 }
 
 

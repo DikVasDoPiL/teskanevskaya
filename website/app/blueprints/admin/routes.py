@@ -294,7 +294,7 @@ def product(name):
 
     product = Product.query.filter_by(name=name).first()
     if not product:
-        return redirect(url_for('admin.products'))
+        return redirect(url_for('admin.products')) 
 
     form = ProductForm(obj=product)
     form.category_id.choices = [(c.id, c.name) for c in Category.query.all()]

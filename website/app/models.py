@@ -95,7 +95,7 @@ class Order(db.Model):
     username = db.Column(db.String(64), nullable=False, unique=True)
     phone = db.Column(db.String(20), nullable=False)
     address = db.Column(db.Text, nullable=False)
-    description = db.Column(db.Text, nullable=True)
+    usercomment = db.Column(db.Text, nullable=True)
     installation = db.Column(db.Boolean, default=False)
     # cost = db.Column(db.Float, nullable=True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)

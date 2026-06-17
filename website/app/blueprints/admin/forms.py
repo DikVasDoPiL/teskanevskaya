@@ -103,7 +103,7 @@ class ProductForm(FlaskForm, FormButtons):
         Optional(),
         Length(max=200, message='Максимум 200 символов')
     ])
-    price = DecimalField('Стоимость, руб', validators=[
+    price = DecimalField('Цена', validators=[
         Optional(),
         NumberRange(min=0, message='Стоимость не может быть отрицательной')
     ],
