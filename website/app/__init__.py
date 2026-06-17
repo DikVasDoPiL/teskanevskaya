@@ -5,7 +5,7 @@ import os
 from flask import Flask, send_from_directory
 
 from app.config import Config
-from app.extentions import db, migrate, login_manager
+from app.extentions import db, migrate, login_manager, mail
 from app.models import User
 
 
@@ -27,6 +27,7 @@ def create_app(config_class=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    mail.init_app(app)
 
     # Функция для восстановления объекта пользователя из сессии по его id
     @login_manager.user_loader
