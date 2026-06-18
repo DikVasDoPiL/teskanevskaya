@@ -95,7 +95,7 @@ class Order(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=datetime.now)
-    username = db.Column(db.String(64), nullable=False, unique=True)
+    username = db.Column(db.String(64), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
     address = db.Column(db.Text, nullable=False)
     usercomment = db.Column(db.Text, nullable=True)

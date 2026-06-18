@@ -13,8 +13,6 @@ def send_message(body_text, mail_subject='Онлайн-заказ с teskanevska
                   recipients=[recipient_email])
     
     msg.body = body_text 
-    
-    print(current_app.config['MAIL_SERVER'])
 
     try:
         mail.send(msg)

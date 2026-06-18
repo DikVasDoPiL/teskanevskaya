@@ -8,7 +8,8 @@ from .services import get_products_per_category
 @main_bp.route('/index')
 @main_bp.route('/')
 def index():
-    products_all = get_products_per_category(6)
+    products_all = get_products_per_category(9)
+
     return render_template('main/home.html',
                            name='teskanevskaya',
                            products_all = products_all)

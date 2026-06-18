@@ -19,8 +19,8 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         # однократно для создания пользователя
-        from werkzeug.security import generate_password_hash
-        print(username, generate_password_hash(password))
+        # from werkzeug.security import generate_password_hash
+        # print(username, generate_password_hash(password))
 
         # Проверяем пользователя и валидность хэша пароля
         if not user or not user.check_password(password):
