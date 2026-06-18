@@ -50,6 +50,7 @@ class Category(db.Model):
     active = db.Column(db.Boolean, default=True)
     fields = db.relationship('CustomFields', secondary=custom_field_category, backref=db.backref('category', lazy='dynamic'))
     image_path = db.Column(db.String(255), nullable=True)
+    products = db.relationship('Product', backref='category', lazy=True)
 
     def __repr__(self):
         return f'<Category {self.id}: {self.name}>'
@@ -65,6 +66,7 @@ class Promotion(db.Model):
     start = db.Column(db.DateTime, default=datetime.now, nullable=False)
     end = db.Column(db.DateTime, default=True, nullable=False)
     image_path = db.Column(db.String(255), nullable=True)
+    products = db.relationship('Product', backref='promotion', lazy=True)
 
     def __repr__(self):
         return f'<Promotion {self.id}: {self.name} from {self.start} to {self.end}>'
@@ -82,6 +84,7 @@ class Product(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
     promo_id = db.Column(db.Integer, db.ForeignKey('promotions.id'), nullable=True)
     custom_fields_data = db.Column(db.JSON, nullable=True)
+    orders = db.relationship('Order', backref='product', lazy=True)
 
     def __repr__(self):
         return f'<Product {self.id}: {self.name}>'

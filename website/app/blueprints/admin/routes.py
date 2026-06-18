@@ -242,19 +242,19 @@ def promotion(name):
 @admin_bp.route("/products", methods=["GET", "POST"])
 def products():
     if not current_user.is_authenticated:
-        return redirect(url_for('main.index'), 301)
+        return redirect(url_for('main.index'))
     produtcs_all = Product.query.order_by(Product.name).all()
 
-    for product in produtcs_all:
-        if current_cat := Category.query.filter_by(id=product.category_id).first():
-            product.category = current_cat.name
-        else:
-            product.category = '---'
+    # for product in produtcs_all:
+    #     if current_cat := Category.query.filter_by(id=product.category_id).first():
+    #         product.category.name = current_cat.name
+    #     else:
+    #         product.category.name = '---'
 
-        if current_promo := Promotion.query.filter_by(id=product.promo_id).first():
-            product.promo = current_promo.name
-        else:
-            product.promo = '---'
+    #     if current_promo := Promotion.query.filter_by(id=product.promo_id).first():
+    #         product.promo = current_promo.name
+    #     else:
+    #         product.promo = '---'
 
     form = ProductForm()
     form.category_id.choices = [(c.id, c.name) for c in Category.query.all()]
@@ -322,7 +322,7 @@ def product(name):
                     form.populate_obj(product)
                     db.session.commit()
                     flash(f'Продукт [{product.name}] сохранен! 😊')
-                    return redirect(url_for('admin.products'), code=301)
+                    return redirect(url_for('admin.products'))
                 else:
                     flash(f'Продукт {target_obj.name} уже существует! Выберите другое имя.', 'error')
                     render_template('./admin/product.html',

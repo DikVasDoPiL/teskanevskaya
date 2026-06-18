@@ -795,6 +795,48 @@ dialog[open], dialog[open]::backdrop {
     border-radius: 0.5rem;
 }
 
+/* Shop page */
+
+.shop {
+    max-width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+}
+
+aside.navigation {
+    width: 12rem;
+}
+
+article.content {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: 100vh;
+    -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
+    scroll-behavior: smooth; 
+}
+
+.hide-scrollbar {
+    /* 1. Для Firefox */
+    scrollbar-width: none; 
+    
+    /* 2. Для Internet Explorer и старого Edge */
+    -ms-overflow-style: none;  
+}
+
+/* 3. Для Chrome, Safari, Opera и нового Edge (движок WebKit) */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none; 
+}
+
+.shop-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+
 
 /* CONTAINER REQUEST */
 
