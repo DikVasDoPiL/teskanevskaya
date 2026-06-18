@@ -2,7 +2,7 @@
 from flask import render_template
 
 from app.blueprints.main import main_bp
-from .services import get_products_per_category, get_product_by_name, get_products_by_category
+from .services import get_products_per_category
 
 
 @main_bp.route('/index')

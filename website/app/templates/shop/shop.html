@@ -1,0 +1,40 @@
+{% extends "./main/contact.html" %}
+
+{% block title %}
+Сплит-системы:
+{% endblock %}
+
+
+{% block page %}
+    <section class="main-section">
+        <div class="container">
+            <div class="content">
+                <h1>«Технологии сервиса» — {{title}}</h1>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block content %}
+<section class="main-section">
+    <div class="container shop">
+        <aside class="navigation">
+            {% block navigation %}
+                <ul class="shop-menu">
+                    <li><a class="menu--item" href="{{ url_for('shop.index') }}">Все товары</a></li>
+                    {% for cat in categories %}
+                        <li><a class="menu--item" href="{{ url_for('shop.products_by_category', cat_name=cat.name) }}">{{cat.name}}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endblock %}  
+        </aside>
+        
+        <article class="content hide-scrollbar">
+            {% block products %}
+        
+            {% endblock %}               
+        </article>
+    </div>
+</section>
+{% endblock %}  
+

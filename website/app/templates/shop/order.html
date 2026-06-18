@@ -5,80 +5,80 @@
 {% endblock %}
 
 {% block content %}
-
-            <section class="main-section">
-                <div class="container">
-                    <h1>{{ product.name.data }}</h1>
-                    
-                    <form class="form_order_container" method="POST" >
+    <section class="main-section">
+        <div class="container">
+            
+            <form class="form_order_container" method="POST" >
+                
+                <div class="product_detail">
                         
-                        <div class="product_detail">
-                              
-                            <h2>Описание продукта</h2>
+                    <h1>{{context.product_name}}</h1>
+                    {% set product = context.product_fields %}
 
-                            {% if product.image_path.data %}
-                                <img class="product-image"
-                                    src="{{ url_for('uploaded_file', filename='images/' + product.image_path.data) }}"
-                                    alt="{{product.image_path.data}}"
-                                    srcset="{{ url_for('uploaded_file', filename='images/' + product.image_path.data) }}">
-                            {% endif %}
-                            <div class="product_field">                                
-                                <div class="product_field_value">{{ product.description.data }}</div>
-                            </div>
-                            <div class="product_field">
-                                <div class="product_field_label">{{ product.price.label(class="field-label") }}</div>
-                                <div class="product_field_value home-product-price">{{ product.price.data }} ₽</div>
-                            </div>
-                            <div class="product_field">
-                                <div class="product_field_label">{{ product.visible.label(class="field-label") }}</div>
-                                <div class="product_field_value home-product-price">{{ "Да" if product.visible.data else "Нет" }} </div>
-                            </div>
-                            {% for name, value in custom_fields.items() %}
-                                <div class="product_field" >
-                                    <div class="product_field_label">{{ name }}</div>
-                                    <div class="product_field_value home-product-price">{{ value | string if value else '---' }}</div>
-                                </div>
-                            {% endfor %}
+                    {% if product.image_path %}
+                        <img class="product-image"
+                            src="{{ url_for('uploaded_file', filename='images/' + product.image_path.data) }}"
+                            alt="{{product.image_path.data}}"
+                            srcset="{{ url_for('uploaded_file', filename='images/' + product.image_path.data) }}">
+                    {% endif %}
+                    <div class="product_field">                                
+                        <div class="product_field_value">{{ product.description.data }}</div>
+                    </div>
+                    <div class="product_field">
+                        <div class="product_field_label field-label">{{ product.price.label }}</div>
+                        <div class="product_field_value home-product-price">{{ product.price.data }} ₽</div>
+                    </div>
+                    <div class="product_field">
+                        <div class="product_field_label field-label">{{ product.visible.label }}</div>
+                        <div class="product_field_value home-product-price">{{ "Да" if product.visible.data else "Нет" }} </div>
+                    </div>
+                    {% set custom_fields = context.custom_fields %}
+                    {% for name, value in custom_fields.items() %}
+                        <div class="product_field" >
+                            <div class="product_field_label">{{ name }}</div>
+                            <div class="product_field_value home-product-price">{{ value | string if value else '---' }}</div>
                         </div>
-
-                        <div class="order_detail">
-                            <h2>Детали заказа</h2>
-                            {{ form.hidden_tag() }} 
-                            <div class="order_field">                                    
-                                <div class="order_field_label">
-                                    {{ form.username.label(class="field-label") }}
-                                    <span style="color: red;">*</span>
-                                </div>
-                                <div class="order_field_value">{{ form.username(size=32, class="field-input") }}</div>
-                            </div>
-                            <div class="order_field">                                    
-                                <div class="order_field_label">
-                                    {{ form.phone.label(class="field-label") }}
-                                    <span style="color: red;">*</span>
-                                </div>
-                                <div class="order_field_value">{{ form.phone(size=32, class="field-input") }}</div>
-                            </div>
-                            <div class="form-field">                                    
-                                <div class="order_field_label">{{ form.installation.label(class="field-label") }}</div>
-                                <div class="order_field_value">{{ form.installation(size=32, class="form-field--checkbox checkbox-input") }}</div>
-                            </div>
-                            <div class="order_field">                                    
-                                <div class="order_field_label">{{ form.address.label(class="field-label") }}</div>
-                                <div class="order_field_value">{{ form.address(size=32, class="field-input") }}</div>
-                            </div>
-                            <div class="order_field">                                    
-                                <div class="order_field_label">{{ form.usercomment.label(class="field-label") }}</div>
-                                <div class="order_field_value">{{ form.usercomment(size=32, class="field-input") }}</div>
-                            </div>
-
-                            <div class="order_field order_field_submits">
-                                {{ form.submit_send(class="form-submit submit-green") }}
-                                {{ form.submit_cancel(class="form-submit submit-red") }}
-                            </div>
-                        </div>
-                        
-                    </form>
-
+                    {% endfor %}
                 </div>
-            </section>
+
+                <div class="order_detail">
+                    <h2>Детали заказа</h2>
+                    {{ form.hidden_tag() }} 
+                    <div class="order_field">                                    
+                        <div class="order_field_label">
+                            {{ form.username.label(class="field-label") }}
+                            <span style="color: red;">*</span>
+                        </div>
+                        <div class="order_field_value">{{ form.username(size=32, class="field-input") }}</div>
+                    </div>
+                    <div class="order_field">                                    
+                        <div class="order_field_label">
+                            {{ form.phone.label(class="field-label") }}
+                            <span style="color: red;">*</span>
+                        </div>
+                        <div class="order_field_value">{{ form.phone(size=32, class="field-input") }}</div>
+                    </div>
+                    <div class="form-field">                                    
+                        <div class="order_field_label">{{ form.installation.label(class="field-label") }}</div>
+                        <div class="order_field_value">{{ form.installation(size=32, class="form-field--checkbox checkbox-input") }}</div>
+                    </div>
+                    <div class="order_field">                                    
+                        <div class="order_field_label">{{ form.address.label(class="field-label") }}</div>
+                        <div class="order_field_value">{{ form.address(size=32, class="field-input") }}</div>
+                    </div>
+                    <div class="order_field">                                    
+                        <div class="order_field_label">{{ form.usercomment.label(class="field-label") }}</div>
+                        <div class="order_field_value">{{ form.usercomment(size=32, class="field-input") }}</div>
+                    </div>
+
+                    <div class="order_field order_field_submits">
+                        {{ form.submit_send(class="form-submit submit-green") }}
+                        {{ form.submit_cancel(class="form-submit submit-red", formnovalidate=True) }}
+                    </div>
+                </div>
+                
+            </form>
+
+        </div>
+    </section>
 {% endblock %}

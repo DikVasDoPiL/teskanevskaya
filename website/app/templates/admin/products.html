@@ -32,7 +32,7 @@
             </div>
             <div class="product-name">{{ product.name }}</div>
             <div class="product-description">{{ product.description[:64] if product.description else '---' }}</div>
-            <div class="product-category">{{ product.category }}</div>
+            <div class="product-category">{{ product.category.name }}</div>
             <div class="product-price">{{ product.price }}</div>
             <div class="cat-status">{{ "✅" if product.visible else "❌" }}</div>
         </a>

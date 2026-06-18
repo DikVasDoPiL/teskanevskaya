@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, BooleanField, SelectField
+from wtforms import StringField, TextAreaField, SubmitField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, Length
+
 
 
 class FormButtons:
@@ -14,6 +15,4 @@ class OrderForm(FlaskForm, FormButtons):
     installation = BooleanField('Нужна установка', default=True)
     address = TextAreaField('Адрес доставки')
     usercomment = TextAreaField('Комментарий к заказу')
-    product_id = SelectField('Товар', validators=[DataRequired()],
-                              coerce=int)
-
+    product_id = IntegerField('Товар', validators=[DataRequired()])
