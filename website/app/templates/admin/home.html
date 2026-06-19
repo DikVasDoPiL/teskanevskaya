@@ -4,8 +4,61 @@
     {{ title }}
 {% endblock %}
 
+
 {% block article %}
-    <h1>Админка</h1>
+    <h2>Активные заказы</h2>
+    <div class="pagination pagination-top">
+        {% if orders.has_prev %}
+            <a class="form-submit submit-neutral"
+            href="{{ url_for('admin.home', page=orders.prev_num) }}">
+            &laquo; Назад</a>
+        {% endif %}
+        {% if orders.has_next %}
+            <a class="form-submit submit-neutral"
+            href="{{ url_for('admin.home', page=orders.next_num) }}">
+            Вперед &raquo;</a>
+        {% endif %}
+    </div>
+
+    <div class="orders-table">
+        <header class="table-header orders-table-header">
+            <div class="order-name">Заказчик</div>
+            <div class="order-product">Товар (услуга)</div>
+            <div class="order-address">Адрес</div>
+            <div class="order-usercomment">Комментарий</div>
+            <div class="order-created">Последнее изменение</div>
+        </header>
+    {% for order in orders %}
+        {% if not order.closed %}
+        <a class="table-row orders-table-row" href="{{ url_for('admin.client_order', order=order.id) }}">
+            <div class="order-name">{{ order.username }}</div>
+            <div class="order-product">{{ order.product.name }}</div>
+            <div class="promo-address">{{ order.address if order.address else '---' }}</div>
+            <div class="order-usercomment">{{ order.usercomment if order.usercomment else '---' }}</div>
+            <div class="order-created">
+                {% if order.updated_at <= order.created_at %}
+                    Создан: {{order.created_at.strftime('%Y-%m-%d')}}
+                {% else %}
+                    Изменен: {{order.updated_at.strftime('%Y-%m-%d')}}
+                {% endif %}
+            </div>
+        </a>
+        {% endif %}
+    {% endfor %}
+    </div>
+
+    <div class="pagination pagination-bottom">
+        {% if orders.has_prev %}
+            <a class="form-submit submit-neutral"
+            href="{{ url_for('admin.home', page=orders.prev_num) }}">
+            &laquo; Назад</a>
+        {% endif %}
+        {% if orders.has_next %}
+            <a class="form-submit submit-neutral"
+            href="{{ url_for('admin.home', page=orders.next_num) }}">
+            Вперед &raquo;</a>
+        {% endif %}
+    </div>
 {% endblock %}
 
 

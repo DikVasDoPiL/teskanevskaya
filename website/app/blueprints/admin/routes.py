@@ -8,16 +8,69 @@ from app import db
 from app.blueprints.admin import admin_bp
 from app.blueprints.admin.forms import CategoryForm, CustomFieldsForm, PromotionForm, ProductForm, BrandForm
 from app.blueprints.admin.functions import replace_image, delete_images
-from app.models import Category, CustomFields, Promotion, Product, Brand
+from app.blueprints.shop.forms import OrderForm
+from app.models import Category, CustomFields, Promotion, Product, Brand, Order
+from app.functions import xor_crypt_decrypt
 
-
-
-@admin_bp.route("/home", methods=["GET"])
-@admin_bp.route("/", methods=["GET"])
+@admin_bp.route("/<int:page>")
+@admin_bp.route("/")
 @login_required
-def home():
+def home(page=1):
+    per_page=2
+    orders_all = (Order.query
+                  .filter_by(closed=False)
+                  .paginate(page=page,
+                         per_page=per_page,
+                         error_out=False))
+
+
     return render_template('./admin/home.html',
-                           title="Панель управления")
+                           title="Панель управления",
+                           orders=orders_all)
+
+
+@admin_bp.route("/order/<int:order>", methods=["GET", "POST"])
+@admin_bp.route("/order", methods=["GET", "POST"])
+@login_required
+def client_order(order:int):
+    the_order = Order.query.filter_by(id=order).first()
+    product = Product.query.filter_by(id=the_order.product_id).first()
+    back_url = request.args.get('back_url', default=url_for('admin.home'))
+
+    if not the_order:
+        return redirect(url_for('admin.home'))
+    form = OrderForm(obj=the_order)
+
+
+    if request.method == "POST":
+        if form.submit_cancel.data:
+            return redirect(back_url)
+
+        if form.validate_on_submit():
+
+            form.populate_obj(the_order)
+
+            the_order.phone = xor_crypt_decrypt(the_order.phone)
+
+            if form.submit_save.data:
+                db.session.commit()
+                flash(f'Заказ [{the_order.id}, {the_order.username}] сохранен! 😊')
+                return redirect(back_url)
+
+            if form.submit_close.data:
+                the_order.closed = not the_order.closed
+                db.session.commit()
+                flash(f'Заказ [№{the_order.id}, {the_order.username}] завершен! 😊')
+                return redirect(back_url)
+
+        else:
+            flash('Ошибка создания записи, заполните корректно поля формы', 'error')
+
+    form.phone.data = xor_crypt_decrypt(form.phone.data)
+    return render_template('./admin/order.html',
+                           title=f"Заказ от {the_order.username}",
+                           form=form,
+                           product=product)
 
 
 @admin_bp.route("/custom_fields", methods=["GET", "POST"])
@@ -63,7 +116,7 @@ def custom_field(name):
         if form.validate_on_submit():
             target_obj = CustomFields.query.filter_by(name=form.name.data).first()
             if form.submit_save.data:
-                print("submit_save:", target_obj)
+
                 if not target_obj or field.id == target_obj.id:
                     form.populate_obj(field)
                     db.session.commit()

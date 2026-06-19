@@ -333,6 +333,13 @@ article {
 .form-field--checkbox {
     display: grid;
     gap: 1rem;
+    grid-template-columns: 2fr 3fr;
+}
+
+.order-field,
+.order-field--checkbox {
+    display: grid;
+    gap: 1rem;
     grid-template-columns: 5fr 2fr;
 }
 
@@ -747,6 +754,22 @@ dialog[open], dialog[open]::backdrop {
 }
 
 /* FORM ORDER */
+
+.orders-table {
+    display: grid;
+}
+
+.orders-table-header,
+.orders-table-row {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.order-form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
 
 .form_order_container {
     display: grid;

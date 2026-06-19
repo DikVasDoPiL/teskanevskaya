@@ -112,6 +112,10 @@ class ProductForm(FlaskForm, FormButtons):
         DataRequired(message='Название обязательно'),
         Length(max=64, message='Максимум 64 символа')
     ])
+    brand = StringField('Производитель', validators=[
+        Optional(),
+        Length(max=64, message='Максимум 64 символа')
+    ])
     description = TextAreaField('Описание', validators=[
         Optional(),
         Length(max=1000, message='Максимум 1000 символов')

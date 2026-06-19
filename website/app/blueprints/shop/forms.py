@@ -6,7 +6,9 @@ from wtforms.widgets import DateInput
 
 class FormButtons:
     submit_send = SubmitField('Создать заказ')
+    submit_save = SubmitField('Обновить')
     submit_cancel = SubmitField('Отмена')
+    submit_close = SubmitField('Удалить')
 
 
 class OrderForm(FlaskForm, FormButtons):

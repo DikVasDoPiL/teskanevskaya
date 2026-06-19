@@ -1,0 +1,67 @@
+{% extends "./admin/private.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block article %}
+
+    <h1>{{ title }}: создан {{form.created_at.data if form.created_at.data else "X"}}</h1>
+    <div class="order-product-details">
+        <div class="field-input"> {{  product.category.name }}</div>
+        <div class="field-input"> {{  product.name }}</div>
+        <div class="field-input home-product-price"> {{  product.price }} руб. </div>
+    </div>
+
+    {% if form %}
+    <form id="admin-order-form" class="order-form" action="" method="post">
+        {{ form.hidden_tag() }}
+        {{ form.closed(hidden=True) }}
+        <div class="order-field">
+            <div class="field-label">
+                Клиенту {{ "" | string if form.delivery else "не" | string }} нужна доставка и
+                {{ "" | string if form.installation else "не" | string }} нужна установка
+            </div>
+        </div>
+        <div class="order_field order_field_submits">
+            <a class="form-submit submit-green" href="tel:{{form.phone.data}}">Позвонить</a>
+            {{ form.submit_save(class="form-submit submit-green") }}
+            {{ form.submit_cancel(class="form-submit submit-neutral", formnovalidate=True) }}
+            {% if form.closed.data %}
+                {{ form.submit_close(class="form-submit submit-neutral", value="Восстановить") }}
+            {% else %}
+                {{ form.submit_close(class="form-submit submit-red") }}
+            {% endif %}
+        </div>
+        <h2>Детали заказа:</h2>
+        <div class="admin-order">
+            <div class="order-field">
+                <div class="field-label">Клиент</div>
+                {{  form.username(class="field-input") }}
+            </div>
+            <div class="order-field">
+                {{  form.phone.label(class="field-label") }}
+                {{  form.phone(class="field-input") }}
+            </div>
+            <div class="order-field">
+                <div class="field-label">Последнее изменение</div>
+                {{  form.updated_at(class="field-input", disabled=True) }}
+            </div>
+            <div class="order-field">
+                {{  form.address.label(class="field-label") }}
+                {{  form.address(class="field-input") }}
+            </div>
+            <div class="order-field">
+                {{  form.usercomment.label(class="field-label") }}
+                {{  form.usercomment(class="field-input") }}
+            </div>
+        </div>
+    </form>
+    {% endif %}
+
+
+
+{% endblock %}
+
+
+

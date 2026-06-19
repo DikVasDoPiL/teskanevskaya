@@ -26,6 +26,7 @@
                         >
                         <div>+7 (918) 641-64-16</div>
                     </a>
+
                 </div>
             </div>
             <nav class="top-nav container">
@@ -33,7 +34,13 @@
                 <!--    <li><a class="top-menu--item" href="{{ url_for('main.index') }}">Главная</a></li> -->
                     <li><a class="top-menu--item" href="{{ url_for('shop.index') }}">Каталог</a></li>
                 <!--    <li><a class="top-menu--item" href="{{ url_for('main.index') }}">О нас</a></li> -->
+                    {% if current_user.is_authenticated %}
+                        <li><a class="top-menu--item" href="{{ url_for('admin.home') }}">{{ current_user.username }}</a></li>
+                       <li><a class="top-menu--item" href="{{ url_for('auth.logout') }}">Выход</a></li>
+
+                    {% endif %}
                 </ul>
             </nav>
+
         </header>
 {% endblock %}

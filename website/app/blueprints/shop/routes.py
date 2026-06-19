@@ -117,7 +117,7 @@ def order(category_name, product_name):
 
             send_email(
                 subject="Новый заказ на сайте teskanevskaya.ru",
-                recipients=[ "firelli@li.ru", "michail.kub@mail.ru"],
+                recipients=[ "xlam@firelli.ru", "michail.kub@mail.ru"], #"michail.kub@mail.ru"
                 text_body=email_body
             )
 

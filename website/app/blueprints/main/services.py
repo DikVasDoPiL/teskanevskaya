@@ -20,8 +20,10 @@ def get_products_per_category(n):
 def get_product_by_name(name):
     if product := Product.query.filter_by(name=name).first():
         return product
+    return None
 
 
 def get_products_by_category(category, limit=16):
     if products := Product.query.filter_by(category_id=category.id).limit(limit).all():
         return products
+    return None
