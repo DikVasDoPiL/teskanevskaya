@@ -4,7 +4,6 @@ from datetime import datetime
 from PIL import Image
 from flask import current_app
 
-from pathlib import Path
 
 
 def delete_images(img_path: str | None):
@@ -38,7 +37,7 @@ def replace_image(data, img_path: str | None, prefix: str) -> str:
         return int(width / kt), int(height / kt)
 
     # Resize uploaded image and make thumbnail
-    print(data)
+
     with Image.open(data) as img:
         if img.mode != 'RGBA':
             img = img.convert('RGBA')

@@ -16,7 +16,7 @@ from app.functions import xor_crypt_decrypt
 @admin_bp.route("/")
 @login_required
 def home(page=1):
-    per_page=2
+    per_page=20
     orders_all = (Order.query
                   .filter_by(closed=False)
                   .paginate(page=page,
