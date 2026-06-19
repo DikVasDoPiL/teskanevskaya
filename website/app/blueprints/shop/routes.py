@@ -8,7 +8,7 @@ from app.functions import xor_crypt_decrypt
 
 from app.blueprints.shop import shop_bp
 from app.blueprints.shop.forms import OrderForm
-from app.blueprints.shop.functions import send_message
+from app.blueprints.mail.services import send_email
 
 from app.blueprints.admin.forms import ProductForm
 
@@ -107,7 +107,7 @@ def order(category_name, product_name):
                 Заказ №{order_new.id} создан!
 
                 Отправитель: {order_form.username.data}
-                Телефон: {order_form.phone.data}
+                Телефон: {xor_crypt_decrypt(order_new.phone)}
 
                 Продукт: {product.category.name}: {product.name} {'+ установка' if order_form.installation.data else ""}
                 {'Доставка: ' + order_form.address.data if order_form.address.data else "Самовывоз"}
@@ -115,9 +115,13 @@ def order(category_name, product_name):
                 Комментарий к заказу: {order_form.usercomment.data}
             """
 
-            result = send_message(email_body)
+            send_email(
+                subject="Новый заказ на сайте teskanevskaya.ru",
+                recipients=[ "firelli@li.ru", "michail.kub@mail.ru"],
+                text_body=email_body
+            )
 
-            flash(f'Заказ [{order_new.username}, {xor_crypt_decrypt(order_new.phone)} {product.name}] создан! 😊')
+            flash(f'Заказ [{order_new.username}, {xor_crypt_decrypt(order_new.phone)}, {product.name}] создан! 😊')
             
             return redirect(url_for('shop.index'))
     

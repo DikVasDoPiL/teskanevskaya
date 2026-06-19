@@ -33,7 +33,7 @@ def create_app(config_class=Config):
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
-
+    
     # Импортируем модели, чтобы Flask-Migrate "увидел" их перед созданием таблиц
     from app import models
 
@@ -48,6 +48,12 @@ def create_app(config_class=Config):
 
     from app.blueprints.shop import shop_bp
     app.register_blueprint(shop_bp, url_prefix='/shop')
+
+    # @app.route('/test-debug')
+    # def test_debug():
+    #     # Напечатает в логи сервера (passenger.log или gunicorn.log)
+    #     print("SENDER FROM CONFIG:", app.config.get('MAIL_DEFAULT_SENDER'))
+    #     return f"Sender: {app.config.get('MAIL_DEFAULT_SENDER')}"
     
     return app
 

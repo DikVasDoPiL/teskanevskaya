@@ -18,7 +18,7 @@ def login():
 
         user = User.query.filter_by(username=username).first()
 
-        # однократно для создания пользователя
+       # однократно для создания пользователя
         # from werkzeug.security import generate_password_hash
         # print(username, generate_password_hash(password))
 
@@ -42,7 +42,7 @@ def login():
 def logout():
     if current_user.is_authenticated:
         logout_user()
-    return redirect(url_for('main.index'))
+    return redirect(url_for('shop.index'))
 
 
 

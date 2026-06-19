@@ -1,0 +1,62 @@
+{% extends "./admin/private.html" %}
+
+{% block title %}
+    Производители:
+{% endblock %}
+
+{% block article %}
+    <div class="cat-menu">
+        <button class="cat-btn grey-btn" type="button" onclick="overlayMenu.showModal()">Добавить</button>
+    </div>
+
+    <div class="table">
+        <header class="table-header promotions-header">
+            <div class="promo-img">Изображение</div>
+            <div class="promo-name">Нименование</div>
+            <div class="promo-description">Описание</div>
+        </header>
+    {% for brand in brands %}
+        <a class="table-row promotions-row" href="{{ url_for('admin.brand', name=brand.name) }}">
+            <div class="promo-img">
+                {% if brand.image_path %}
+                <img class="thumb-img"
+                     src="{{ url_for('uploaded_file', filename='images/thumbs/' + brand.image_path) }}"
+                     alt="{{brand.image_path}}"
+                     srcset="{{ url_for('uploaded_file', filename='images/thumbs/' + brand.image_path) }}">
+                {% endif %}
+            </div>
+            <div class="promo-name">{{ brand.name }}</div>
+            <div class="promo-description">{{ brand.description if brand.description else '---' }}</div>
+        </a>
+    {% endfor %}
+    </div>
+
+
+
+{% endblock %}
+
+    {% block modal %}
+
+          <h3>Добавление производителя</h3>
+          <form id="form-category" class="form-login" action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.name.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.name(class="field-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">{{ form.description.label(class="field-label") }}</div>
+                    <div class="form-field--input">{{ form.description(class="field-input", rows=5) }}</div>
+                </div>
+
+                <div class="form-submits">{{ form.submit_new(class="form-submit submit-green") }}</div>
+          </form>
+
+    {% endblock %}
+
+

@@ -1,0 +1,4 @@
+    User-agent: *
+    Disallow: /admin/
+    Allow: /
+    Sitemap: https://teskanevskaya.ru/sitemap.xml

@@ -21,9 +21,7 @@
                             alt="{{product.image_path.data}}"
                             srcset="{{ url_for('uploaded_file', filename='images/' + product.image_path.data) }}">
                     {% endif %}
-                    <div class="product_field">                                
-                        <div class="product_field_value">{{ product.description.data }}</div>
-                    </div>
+                    
                     <div class="product_field">
                         <div class="product_field_label field-label">{{ product.price.label }}</div>
                         <div class="product_field_value home-product-price">{{ product.price.data }} ₽</div>
@@ -39,6 +37,9 @@
                             <div class="product_field_value home-product-price">{{ value | string if value else '---' }}</div>
                         </div>
                     {% endfor %}
+                    <div class="product_description">                                
+                        {{ product.description.data }}
+                    </div>
                 </div>
 
                 <div class="order_detail">
@@ -49,26 +50,29 @@
                             {{ form.username.label(class="field-label") }}
                             <span style="color: red;">*</span>
                         </div>
-                        <div class="order_field_value">{{ form.username(size=32, class="field-input") }}</div>
+                        <div class="order_field_value">{{ form.username(class="field-input") }}</div>
                     </div>
                     <div class="order_field">                                    
                         <div class="order_field_label">
                             {{ form.phone.label(class="field-label") }}
                             <span style="color: red;">*</span>
                         </div>
-                        <div class="order_field_value">{{ form.phone(size=32, class="field-input") }}</div>
+                        <div class="order_field_value">{{ form.phone( class="field-input") }}</div>
                     </div>
                     <div class="form-field">                                    
                         <div class="order_field_label">{{ form.installation.label(class="field-label") }}</div>
-                        <div class="order_field_value">{{ form.installation(size=32, class="form-field--checkbox checkbox-input") }}</div>
+                        <div class="order_field_value">{{ form.installation(class="form-field--checkbox checkbox-input") }}</div>
+                    </div>
+                    <div class="form-field">                                    
+                        <div class="order_field_label">{{ form.delivery.label(class="field-label") }}</div>
+                        <div class="order_field_value">{{ form.delivery(class="form-field--checkbox checkbox-input") }}</div>
                     </div>
                     <div class="order_field">                                    
                         <div class="order_field_label">{{ form.address.label(class="field-label") }}</div>
-                        <div class="order_field_value">{{ form.address(size=32, class="field-input") }}</div>
-                    </div>
-                    <div class="order_field">                                    
+                        <div class="order_field_value">{{ form.address(class="field-input") }}</div>
+                              
                         <div class="order_field_label">{{ form.usercomment.label(class="field-label") }}</div>
-                        <div class="order_field_value">{{ form.usercomment(size=32, class="field-input") }}</div>
+                        <div class="order_field_value">{{ form.usercomment(class="field-input") }}</div>
                     </div>
 
                     <div class="order_field order_field_submits">

@@ -59,6 +59,29 @@
 
                 <div class="form-field">
                     <div class="form-field--label">
+                        {{ form.price.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.price(class="field-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.visible.label(class="field-label") }}
+                    </div>
+                    <div class="form-field--input">{{ form.visible(class="checkbox-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">
+                        {{ form.brand_id.label(class="field-label") }}
+                        <span style="color: red;">*</span>
+                    </div>
+                    <div class="form-field--input">{{ form.brand_id(class="field-input") }}</div>
+                </div>
+
+                <div class="form-field">
+                    <div class="form-field--label">
                         {{ form.image_path.label }}
                     </div>
                     <div class="form-field--input">

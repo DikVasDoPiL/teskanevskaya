@@ -60,6 +60,23 @@ class CategoryForm(FlaskForm, FormButtons):
     ])
 
 
+class BrandForm(FlaskForm, FormButtons):
+    id = IntegerField()
+    name = StringField('Название', validators=[DataRequired(DATA_REQUIRED_MESSAGE), Length(min=3, max=64)])
+    description = TextAreaField('Описание', validators=[
+        Optional(),
+        Length(max=500, message='Максимум 500 символов')
+    ])
+    active = BooleanField('Активно', default=True)
+    image_path = StringField('Изображение', validators=[
+        Optional(),
+        Length(max=200, message='Максимум 200 символов')
+    ])
+    image = FileField('Изображение', validators=[
+        FileAllowed(['jpg', 'png', 'jpeg'], "Только изображения jpg, png, jpeg!")
+    ])
+
+
 class PromotionForm(FlaskForm, FormButtons):
     id = IntegerField()
     submit_end = SubmitField('Завершить')
@@ -119,6 +136,8 @@ class ProductForm(FlaskForm, FormButtons):
 
     category_id = SelectField('Категория', validators=[DataRequired()],
                               coerce=int)  # В view: form.category.choices = [(c.id, c.name) for c in Category.query.all()]
+    brand_id = SelectField('Производитель', validators=[DataRequired()],
+                              coerce=int)  # В view: form.brand.choices = [(c.id, c.name) for c in Brand.query.all()]
     promo_id = SelectField('Промо (опционально)', validators=[Optional()],
                            choices=[(0, 'Нет')],
                            coerce=int)  # В view: добавь [(p.id, p.name) for p in Promotion.query.all()] + [(0, 'Нет')]

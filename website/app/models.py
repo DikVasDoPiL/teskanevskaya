@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from sqlalchemy.sql import func
 
 from app.extentions import db
 
@@ -54,7 +54,20 @@ class Category(db.Model):
 
     def __repr__(self):
         return f'<Category {self.id}: {self.name}>'
-    
+
+
+class Brand(db.Model):
+    __tablename__ = 'brands'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), nullable=False, unique=True)
+    description = db.Column(db.Text, nullable=True)
+    active = db.Column(db.Boolean, default=True)
+    image_path = db.Column(db.String(255), nullable=True)
+    products = db.relationship('Product', backref='brand', lazy=True)
+
+    def __repr__(self):
+        return f'<Производитель {self.id}: {self.name}>'
 
 
 class Promotion(db.Model):
@@ -81,8 +94,9 @@ class Product(db.Model):
     image_path = db.Column(db.String(255), nullable=True)
     price = db.Column(db.Float, nullable=True)
     visible = db.Column(db.Boolean, default=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
     promo_id = db.Column(db.Integer, db.ForeignKey('promotions.id'), nullable=True)
+    brand_id = db.Column(db.Integer, db.ForeignKey('brands.id'), nullable=True)
     custom_fields_data = db.Column(db.JSON, nullable=True)
     orders = db.relationship('Order', backref='product', lazy=True)
 
@@ -94,15 +108,17 @@ class Order(db.Model):
     __tablename__ = 'orders'
 
     id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, default=datetime.now)
+    created_at = db.Column(db.DateTime, server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+    closed = db.Column(db.Boolean, default=False)
     username = db.Column(db.String(64), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
     address = db.Column(db.Text, nullable=True)
     usercomment = db.Column(db.Text, nullable=True)
     installation = db.Column(db.Boolean, default=False)
-    # cost = db.Column(db.Float, nullable=True)
+    delivery = db.Column(db.Boolean, default=False)
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
 
 
     def __repr__(self):
-        return f'<Order {self.username}: {self.cost}>'
+        return f'<Order {self.username}: {self.status}, {self.updated_at}>'

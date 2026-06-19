@@ -333,7 +333,7 @@ article {
 .form-field--checkbox {
     display: grid;
     gap: 1rem;
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: 5fr 2fr;
 }
 
 .form-field--label,
@@ -449,10 +449,11 @@ article {
     color: #333;
     padding: 1rem;
     background-color: #FFFA;
+    border-radius: 0.5em;
 }
 .home-product {
     position: relative;
-    border-radius: 0.5em;
+    
     
     display: flex;
     flex-direction: column;

@@ -2,11 +2,11 @@
 import os
 from dotenv import load_dotenv
 
-# Загружаем переменные из файла .env
-load_dotenv()
-
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 BASEDIR = os.path.abspath(os.path.dirname(CURRENT_DIR))
+
+# Загружаем переменные из файла .env
+load_dotenv(os.path.join(BASEDIR, '.env'))
 
 def get_env_bool(var_name, default=False):
     value = os.environ.get(var_name)
@@ -15,7 +15,7 @@ def get_env_bool(var_name, default=False):
     return value.lower() in ('true', '1', 't', 'yes', 'y')
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(24).hex())
+    SECRET_KEY = os.environ.get('SECRET_KEY', '220954021a526e9197dc806787214e74a0ea63594a15526b')
     DEBUG = get_env_bool('DEBUG')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///' + os.path.join(BASEDIR, 'app.db'))
     # Отключаем ненужную систему оповещений SQLAlchemy для экономии памяти
@@ -23,7 +23,7 @@ class Config:
     UPLOAD_FOLDER = os.path.join(BASEDIR, 'uploads')
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 
-    MAIL_SERVER = os.environ.get('MAIL_SERVER', None)
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.timeweb.ru')
     MAIL_PORT = int(os.environ.get('MAIL_PORT', 465))
     MAIL_USE_SSL = get_env_bool('MAIL_USE_SSL', True)
     MAIL_USE_TLS = get_env_bool('MAIL_USE_TLS', False)
@@ -31,4 +31,4 @@ class Config:
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', None)
     MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER', None)
 
-    PHONE_SECRET = os.getenv('PHONE_SECRET', 'qetsfhcbm.')
+    PHONE_SECRET = os.getenv('PHONE_SECRET', 'qetsfhcbm.qetsfhcbm.')

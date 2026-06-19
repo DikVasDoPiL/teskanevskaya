@@ -6,9 +6,9 @@ from flask_login import current_user, login_required
 
 from app import db
 from app.blueprints.admin import admin_bp
-from app.blueprints.admin.forms import CategoryForm, CustomFieldsForm, PromotionForm, ProductForm
+from app.blueprints.admin.forms import CategoryForm, CustomFieldsForm, PromotionForm, ProductForm, BrandForm
 from app.blueprints.admin.functions import replace_image, delete_images
-from app.models import Category, CustomFields, Promotion, Product
+from app.models import Category, CustomFields, Promotion, Product, Brand
 
 
 
@@ -20,7 +20,7 @@ def home():
                            title="Панель управления")
 
 
-@admin_bp.route("custom_fields", methods=["GET", "POST"])
+@admin_bp.route("/custom_fields", methods=["GET", "POST"])
 @login_required
 def custom_fields():
     custom_fields_all = CustomFields.query.order_by(CustomFields.name).all()
@@ -50,7 +50,7 @@ def custom_fields():
                            form=form)
 
 
-@admin_bp.route('custom_fields/<string:name>', methods=["GET", "POST"])
+@admin_bp.route('/custom_fields/<string:name>', methods=["GET", "POST"])
 @login_required
 def custom_field(name):
     field = CustomFields.query.filter_by(name=name).first()
@@ -162,6 +162,76 @@ def category(name):
                            selected_fields=selected_fields)
 
 
+@admin_bp.route("/brands", methods=["GET", "POST"])
+@login_required
+def brands():
+    brands_all = Brand.query.order_by(Brand.name).all()
+    form = BrandForm()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            if form.submit_new.data:
+                brand_new = Brand()
+                form.populate_obj(brand_new)
+                if Brand.query.filter_by(name=form.name.data).first():
+                    flash(f'Производитель  {brand_new.name}  уже существует! Выберите другое имя.', 'error')
+                    return redirect(url_for("admin.brands"))
+                else:
+                    db.session.add(brand_new)
+                    db.session.commit()
+                    flash(f'Категория {brand_new.name} добавлена успешно! 🚀')
+
+                    return redirect(url_for('admin.brand', name=brand_new.name))
+        else:
+            flash('Ошибка создания записи, заполните корректно поля формы', 'error')
+
+    return render_template('./admin/brands.html',
+                           title="Производители",
+                           brands=brands_all,
+                           form=form)
+
+
+@admin_bp.route('/brands/<string:name>', methods=["GET", "POST"])
+@login_required
+def brand(name):
+    brand = Brand.query.filter_by(name=name).first()
+
+    if not brand:
+        return redirect(url_for('admin.brands'))
+
+    form = BrandForm(obj=brand)
+    if request.method == "POST":
+
+        if form.validate_on_submit():
+            target_obj = Brand.query.filter_by(name=form.name.data).first()
+
+            if form.submit_save.data:
+                if not target_obj or brand.id == target_obj.id:
+                    if form.image.data:
+                        # Set image name in object
+                        form.image_path.data = replace_image(
+                            data=form.image.data,
+                            img_path=target_obj.image_path,
+                            prefix='brand')
+
+                    form.populate_obj(brand)
+
+                    db.session.commit()
+                    flash(f'Производитель [{brand.name}] сохранен! 😊')
+                    return redirect(url_for('admin.brands'))
+                else:
+                    print("error_save:", target_obj)
+                    flash(f'Производитель {target_obj.name} уже существует! Выберите другое имя.', 'error')
+                    render_template('./admin/brand.html',
+                                    title="Редактирование категории",
+                                    form=form)
+            if form.submit_cancel.data:
+                return redirect(url_for('admin.brands'))
+    return render_template('./admin/brand.html',
+                           title=f"Категория {name}",
+                           form=form)
+
+
 @admin_bp.route("/promotions", methods=["GET", "POST"])
 @login_required
 def promotions():
@@ -250,7 +320,8 @@ def products():
     #         product.promo = '---'
 
     form = ProductForm()
-    form.category_id.choices = [(c.id, c.name) for c in Category.query.all()]
+    form.category_id.choices = [(0, 'Нет')] + [(c.id, c.name) for c in Category.query.all()]
+    form.brand_id.choices = [(0, 'Нет')] + [(b.id, b.name) for b in Brand.query.all()]
     form.promo_id.choices = [(0, 'Нет')] + [(p.id, p.name) for p in Promotion.query.all()]
 
     if request.method == "POST":
@@ -288,7 +359,8 @@ def product(name):
         return redirect(url_for('admin.products')) 
 
     form = ProductForm(obj=product)
-    form.category_id.choices = [(c.id, c.name) for c in Category.query.all()]
+    form.brand_id.choices = [(0, 'Нет')] + [(b.id, b.name) for b in Brand.query.all()]
+    form.category_id.choices = [(0, 'Нет')] + [(c.id, c.name) for c in Category.query.all()]
     form.promo_id.choices = [(0, 'Нет')] + [(p.id, p.name) for p in Promotion.query.all()]
 
     form.custom_fields = Category.query.filter_by(id=product.category_id).first().fields
