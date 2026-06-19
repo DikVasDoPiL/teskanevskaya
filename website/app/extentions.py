@@ -11,6 +11,6 @@ login_manager = LoginManager()
 mail = Mail()
 
 # Куда перенаправлять пользователя, если у него нет доступа к приватной странице
-login_manager.login_view = 'auth.login'
+login_manager.login_view = 'shop.index'
 login_manager.login_message = 'Пожалуйста, авторизуйтесь для доступа к этой странице.'
 login_manager.login_message_category = 'info'

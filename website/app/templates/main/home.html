@@ -79,11 +79,11 @@
                                 {% if products.image_path %}
                                     {% set cat_image = url_for('uploaded_file', filename='images/thumbs/' + products.image_path) %}
                                 {% else %}
-                                    {% set cat_image = "#" %}
+                                    {% set cat_image = favicon %}
                                 {% endif %}
                                 <img class="thumb-img"
                                     src="{{ cat_image }}"
-                                    alt="{{products.image_path}}"
+                                    alt=""
                                     srcset="{{ cat_image }}">
                                 <h3>{{cat}}</h3>
                             </a>

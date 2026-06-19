@@ -30,12 +30,12 @@
         
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}?v=1">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.13">
+        {% set favicon = url_for('static', filename='img/icon/favicon.svg') %}
         <link
             rel="icon"
             type="image/svg+xml"
-            href="{{ url_for('static', filename='img/icon/favicon.svg') }}"
+            href="{{ favicon }}"
         >
-		
 		
 		<!-- Yandex.Metrika counter -->
 		<script type="text/javascript">

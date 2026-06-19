@@ -4,6 +4,7 @@ from sqlalchemy.orm import joinedload
 from app import db
 
 from app.models import Category, Product, Order
+from app.functions import xor_crypt_decrypt
 
 from app.blueprints.shop import shop_bp
 from app.blueprints.shop.forms import OrderForm
@@ -94,14 +95,16 @@ def order(category_name, product_name):
         if order_form.submit_cancel.data:
             return redirect(back_url)
         if order_form.validate_on_submit():
-            
             order_new = Order()
+
+            order_form.phone.data = xor_crypt_decrypt(order_form.phone.data)
             order_form.populate_obj(order_new)
+            
             db.session.add(order_new)
             db.session.commit()
 
             email_body = f"""
-                Новый заказ №{order_new.id}!
+                Заказ №{order_new.id} создан!
 
                 Отправитель: {order_form.username.data}
                 Телефон: {order_form.phone.data}
@@ -114,7 +117,7 @@ def order(category_name, product_name):
 
             result = send_message(email_body)
 
-            flash(f'Заказ [{order_new.username}, {product.name}] создан и сохранен! 😊')
+            flash(f'Заказ [{order_new.username}, {xor_crypt_decrypt(order_new.phone)} {product.name}] создан! 😊')
             
             return redirect(url_for('shop.index'))
     

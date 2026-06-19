@@ -15,7 +15,7 @@
                     <h1>{{context.product_name}}</h1>
                     {% set product = context.product_fields %}
 
-                    {% if product.image_path %}
+                    {% if product.image_path.data %}
                         <img class="product-image"
                             src="{{ url_for('uploaded_file', filename='images/' + product.image_path.data) }}"
                             alt="{{product.image_path.data}}"

@@ -2,7 +2,7 @@
 from datetime import datetime
 
 from flask import render_template, redirect, url_for, request, flash
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 from app import db
 from app.blueprints.admin import admin_bp
@@ -11,19 +11,18 @@ from app.blueprints.admin.functions import replace_image, delete_images
 from app.models import Category, CustomFields, Promotion, Product
 
 
+
 @admin_bp.route("/home", methods=["GET"])
 @admin_bp.route("/", methods=["GET"])
+@login_required
 def home():
-    if not current_user.is_authenticated:
-        return redirect(url_for('main.index'), 301)
     return render_template('./admin/home.html',
                            title="Панель управления")
 
 
 @admin_bp.route("custom_fields", methods=["GET", "POST"])
+@login_required
 def custom_fields():
-    if not current_user.is_authenticated:
-        return redirect(url_for('index'), 301)
     custom_fields_all = CustomFields.query.order_by(CustomFields.name).all()
     for f in custom_fields_all:
         f.categories = [d.name for d in f.category.all()]
@@ -52,9 +51,8 @@ def custom_fields():
 
 
 @admin_bp.route('custom_fields/<string:name>', methods=["GET", "POST"])
+@login_required
 def custom_field(name):
-    if not current_user.is_authenticated:
-        return redirect(url_for('main.index'), 301)
     field = CustomFields.query.filter_by(name=name).first()
 
     if not field:
@@ -86,9 +84,8 @@ def custom_field(name):
 
 
 @admin_bp.route("/categories", methods=["GET", "POST"])
+@login_required
 def categories():
-    if not current_user.is_authenticated:
-        return redirect(url_for('main.index'), 301)
     categories_all = Category.query.order_by(Category.name).all()
     form = CategoryForm()
 
@@ -116,9 +113,8 @@ def categories():
 
 
 @admin_bp.route('/categories/<string:name>', methods=["GET", "POST"])
+@login_required
 def category(name):
-    if not current_user.is_authenticated:
-        return redirect(url_for('main.index'), 301)
     cat = Category.query.filter_by(name=name).first()
     available_fields = CustomFields.query.filter_by(active=True).all()
     selected_fields = cat.fields
@@ -167,9 +163,8 @@ def category(name):
 
 
 @admin_bp.route("/promotions", methods=["GET", "POST"])
+@login_required
 def promotions():
-    if not current_user.is_authenticated:
-        return redirect(url_for('main.index'), 301)
     promotions_all = Promotion.query.order_by(Promotion.end.desc()).all()
 
     form = PromotionForm()
@@ -199,9 +194,8 @@ def promotions():
 
 
 @admin_bp.route("/promotions/<string:name>", methods=["GET", "POST"])
+@login_required
 def promotion(name):
-    if not current_user.is_authenticated:
-        return redirect(url_for('main.index'), 301)
     promo = Promotion.query.filter_by(name=name).first()
     if not promotion:
         return redirect(url_for('admin.promotions'))
@@ -240,9 +234,8 @@ def promotion(name):
 
 
 @admin_bp.route("/products", methods=["GET", "POST"])
+@login_required
 def products():
-    if not current_user.is_authenticated:
-        return redirect(url_for('main.index'))
     produtcs_all = Product.query.order_by(Product.name).all()
 
     # for product in produtcs_all:
@@ -288,10 +281,8 @@ def products():
 
 
 @admin_bp.route("/products/<string:name>", methods=["GET", "POST"])
+@login_required
 def product(name):
-    if not current_user.is_authenticated:
-        return redirect(url_for('main.index'), 301)
-
     product = Product.query.filter_by(name=name).first()
     if not product:
         return redirect(url_for('admin.products')) 
