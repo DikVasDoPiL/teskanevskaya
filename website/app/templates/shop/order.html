@@ -12,8 +12,9 @@
                 
                 <div class="product_detail">
                         
-                    <h1>{{context.product_name}}</h1>
+                    
                     {% set product = context.product_fields %}
+                    <h1>{{product.brand.data.name}} - {{product.name.data}}</h1>
 
                     {% if product.image_path.data %}
                         <img class="product-image"
@@ -50,29 +51,29 @@
                             {{ form.username.label(class="field-label") }}
                             <span style="color: red;">*</span>
                         </div>
-                        <div class="order_field_value">{{ form.username(class="field-input") }}</div>
+                        <div class="order_field_value">{{ form.username(class="field-input", placeholder="Иван Васильевич") }}</div>
                     </div>
                     <div class="order_field">                                    
                         <div class="order_field_label">
                             {{ form.phone.label(class="field-label") }}
                             <span style="color: red;">*</span>
                         </div>
-                        <div class="order_field_value">{{ form.phone( class="field-input") }}</div>
+                        <div class="order_field_value">{{ form.phone( class="field-input", placeholder="+7-918-641-64-16") }}</div>
                     </div>
-                    <div class="form-field">                                    
+                    <div class="order-field">                                    
                         <div class="order_field_label">{{ form.installation.label(class="field-label") }}</div>
                         <div class="order_field_value">{{ form.installation(class="form-field--checkbox checkbox-input") }}</div>
                     </div>
-                    <div class="form-field">                                    
+                    <div class="order-field">                                    
                         <div class="order_field_label">{{ form.delivery.label(class="field-label") }}</div>
                         <div class="order_field_value">{{ form.delivery(class="form-field--checkbox checkbox-input") }}</div>
                     </div>
                     <div class="order_field">                                    
                         <div class="order_field_label">{{ form.address.label(class="field-label") }}</div>
-                        <div class="order_field_value">{{ form.address(class="field-input") }}</div>
+                        <div class="order_field_value">{{ form.address(class="field-input", placeholder="Каневская, улица Герцена, 71") }}</div>
                               
                         <div class="order_field_label">{{ form.usercomment.label(class="field-label") }}</div>
-                        <div class="order_field_value">{{ form.usercomment(class="field-input") }}</div>
+                        <div class="order_field_value">{{ form.usercomment(class="field-input", placeholder="Нужна консультация") }}</div>
                     </div>
 
                     <div class="order_field order_field_submits">
