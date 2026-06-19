@@ -15,21 +15,20 @@ def get_env_bool(var_name, default=False):
     return value.lower() in ('true', '1', 't', 'yes', 'y')
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(24).hex()
+    SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(24).hex())
     DEBUG = get_env_bool('DEBUG')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-                              'sqlite:///' + os.path.join(BASEDIR, 'app.db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///' + os.path.join(BASEDIR, 'app.db'))
     # Отключаем ненужную систему оповещений SQLAlchemy для экономии памяти
     SQLALCHEMY_TRACK_MODIFICATIONS = get_env_bool('DEBUG')
     UPLOAD_FOLDER = os.path.join(BASEDIR, 'uploads')
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 
-    MAIL_SERVER = os.environ.get('MAIL_SERVER') or None
-    MAIL_PORT = int(os.environ.get('MAIL_PORT')) or 465
-    MAIL_USE_SSL = get_env_bool('MAIL_USE_SSL') or True
-    MAIL_USE_TLS = get_env_bool('MAIL_USE_TLS') or False
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or None 
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or None 
-    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER') or None
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', None)
+    MAIL_PORT = int(os.environ.get('MAIL_PORT', 465))
+    MAIL_USE_SSL = get_env_bool('MAIL_USE_SSL', True)
+    MAIL_USE_TLS = get_env_bool('MAIL_USE_TLS', False)
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME', None)
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', None)
+    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER', None)
 
     PHONE_SECRET = os.getenv('PHONE_SECRET', 'qetsfhcbm.')
