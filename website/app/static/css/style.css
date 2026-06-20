@@ -866,6 +866,10 @@ article.content {
 /* CONTAINER REQUEST */
 
 @container body-size (width < 64rem) {
+
+    .form_order_container {
+        grid-template-columns: 1fr;
+    }
 	
     .shield {
         position: absolute;
@@ -884,7 +888,7 @@ article.content {
 }
 
 @container double-container (width < 60rem) {
-	
+
     .left-column,
     .right-column {
         width: 100%;
